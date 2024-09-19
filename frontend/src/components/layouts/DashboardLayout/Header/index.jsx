@@ -45,13 +45,13 @@ function Navbar() {
       >
         <Typography.Title
           level={3}
-          style={{ color: "#007AFB", marginBottom: 0, fontWeight: "bold" }}
+          style={{ color: "#4C2113", marginBottom: 0, fontWeight: "bold" }}
         >
           ConYeu Store - {userDetail?.user_role?.role_description.toUpperCase()}
         </Typography.Title>
         <DropdownCustomize
           itemsProps={itemsProps}
-          className="bg-[#cfdcfd] text-[#007AFB]"
+          className="bg-[#cfdcfd] text-[#4C2113]"
         />
       </Flex>
     </Header>

@@ -95,7 +95,7 @@ export default function ProductsPage() {
           <div className="flex gap-5 ml-4">
             <button
               className={`border border-[#D1D4D5] rounded-lg px-3 py-1 ${
-                !sort ? "bg-[#007AFB] text-white" : ""
+                !sort ? "bg-[#4C2113] text-white" : ""
               }`}
               onClick={() => handleSort()}
             >
@@ -103,7 +103,7 @@ export default function ProductsPage() {
             </button>
             <button
               className={`border border-[#D1D4D5] rounded-lg px-3 py-1 ${
-                sort === "lowToHigh" ? "bg-[#007AFB] text-white" : ""
+                sort === "lowToHigh" ? "bg-[#4C2113] text-white" : ""
               }`}
               onClick={() => handleSort("lowToHigh")}
             >
@@ -111,7 +111,7 @@ export default function ProductsPage() {
             </button>
             <button
               className={`border border-[#D1D4D5] rounded-lg px-3 py-1 ${
-                sort === "highToLow" ? "bg-[#007AFB] text-white" : ""
+                sort === "highToLow" ? "bg-[#4C2113] text-white" : ""
               }`}
               onClick={() => handleSort("highToLow")}
             >

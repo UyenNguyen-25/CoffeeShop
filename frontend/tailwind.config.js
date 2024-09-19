@@ -67,7 +67,7 @@ module.exports = {
       },
       backgroundColor: {
         "customer-home": "#E7F3FF",
-        "customer-action-blue": "#007AFB",
+        "customer-action-blue": "#4C2113",
       },
       textColor: {
         "hover-red": "#E44918",

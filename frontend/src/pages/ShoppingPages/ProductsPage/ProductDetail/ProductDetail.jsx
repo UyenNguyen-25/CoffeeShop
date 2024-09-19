@@ -149,7 +149,7 @@ const ProductDetail = () => {
                 </div>
                 <div className="flex gap-x-6">
                   <button
-                    className="bg-[#007AFB] px-9 py-3 text-xl text-white rounded-2xl hover:bg-blue-400"
+                    className="bg-[#4C2113] px-9 py-3 text-xl text-white rounded-2xl hover:bg-blue-400"
                     onClick={() => handleAddToCart(detail)} 
                     disabled={detail.quantity === 0}
                   >

@@ -59,11 +59,11 @@ const DropdownCustomize = (props) => {
   ) : (
     <div>
       {" "}
-      <Button className="text-[#4C2113]" type="link" onClick={() => navigate("/register")}>
+      <Button className="text-[#ffffff]" type="link" onClick={() => navigate("/register")}>
         Đăng ký
       </Button>
       /
-      <Button className="text-[#4C2113]" type="link" onClick={() => navigate("/login")}>
+      <Button className="text-[#ffffff]" type="link" onClick={() => navigate("/login")}>
         Đăng nhập
       </Button>
     </div>

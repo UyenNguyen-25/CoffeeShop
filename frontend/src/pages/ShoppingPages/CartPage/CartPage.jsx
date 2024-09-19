@@ -345,7 +345,7 @@ const CartPage = () => {
                   </TableRow>
                 </TableBody>
               </Table>
-              <button className="bg-[#007AFB] hover:bg-blue-700 text-white rounded-lg w-full py-3 font-semibold mt-4" onClick={handlePayment}>
+              <button className="bg-[#4C2113] hover:bg-blue-700 text-white rounded-lg w-full py-3 font-semibold mt-4" onClick={handlePayment}>
                 ĐẶT HÀNG
               </button>
             </div>

@@ -17,7 +17,7 @@ const SearchInput = (props) => {
       value={value}
       placeholder={props.placeholder}
       className={
-        "h-12 w-[300px] lg:w-full border-2 border-[#007AFB] rounded-lg text-xl"
+        "h-12 w-[300px] lg:w-full border-2 border-[#4C2113] rounded-lg text-xl"
       }
       defaultActiveFirstOption={false}
       suffixIcon={null}
