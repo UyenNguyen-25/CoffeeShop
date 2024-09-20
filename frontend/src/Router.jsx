@@ -11,7 +11,6 @@ import ProductDetail from "./pages/ShoppingPages/ProductsPage/ProductDetail/Prod
 import OrderPage from "./pages/ShoppingPages/OrderPage";
 import RequestReturn from "./pages/ShoppingPages/OrderPage/OrderTracking/RequestReturn";
 import ReasonReturn from "./pages/ShoppingPages/OrderPage/OrderTracking/ReasonReturn";
-import ContactPage from "./pages/ShoppingPages/ContactPage";
 import CartPage from "./pages/ShoppingPages/CartPage/CartPage";
 import ProductManagement from "./pages/DashboardPages/ProductManagement";
 import OrderManagement from "./pages/DashboardPages/OrderManagement";
@@ -27,6 +26,7 @@ import Dashboard from "./pages/DashboardPages/Dashboard";
 import Prefetch from "./routes/Prefetch";
 import BrandManagement from "./pages/DashboardPages/BrandManagement";
 import ErrorBoundary from "./components/common/Error";
+import BlogPage from "./pages/ShoppingPages/BlogPage";
 // import { UserLoader } from "./routes/userRoute";
 
 const router = createBrowserRouter([
@@ -74,8 +74,8 @@ const router = createBrowserRouter([
             children: [{ path: "", element: "" }],
           },
           {
-            path: "contact",
-            element: <ContactPage />,
+            path: "blog",
+            element: <BlogPage />,
           },
           {
             path: "profile",

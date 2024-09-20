@@ -11,9 +11,9 @@ const corsOption = {
   credentials: true,
   optionsSuccessStatus: 200,
   allowedHeaders: [
-    // "Content-Type",
-    // "Access-Control-Allow-Credentials",
-    // "Authorization" || "authorization",
+    "Content-Type",
+    "Access-Control-Allow-Credentials",
+    "Authorization" || "authorization",
   ],
 };
 
