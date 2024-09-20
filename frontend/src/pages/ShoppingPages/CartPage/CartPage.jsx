@@ -175,11 +175,11 @@ const CartPage = () => {
     }
   };
   return (
-    <div className=" py-9 px-24 bg-[#F1DEBC]">
-      <h1 className="text-2xl font-semibold pb-10 mt-10">Giỏ Hàng</h1>
+    <div className=" py-9 px-24">
+      <h1 className="text-2xl font-semibold pb-5">Giỏ Hàng</h1>
       {cartItems.length === 0 ? (
         <div className="justify-center items-center flex flex-col">
-          <img src={cart} className="w-1/5 mx-auto mt-5 mb-10" />
+          <img src={cart} className="w-1/5 mx-auto mb-10" />
           <h1 className="text-xl font-semibold mb-15">Giỏ hàng hiện đang trống...</h1>
           <button
             className="text-base border border-transparent bg-[#E44918] hover:bg-[#d63e12] rounded-full text-white px-6 py-3 mt-6 transition duration-300 transform hover:scale-105 shadow-lg"
