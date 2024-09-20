@@ -1,9 +1,15 @@
 const User = require("../model/User");
 
-const getAll = (req, res) => {
-  const users = User.find();
-
-  return res.status(200).json(users);
+const userController = {
+  getAllUsers: async (req, res) => {
+    try {
+      const users = await User.find();
+      return res.status(200).json(users);
+    } catch (error) {
+      console.log("Error: ", error);
+      return res.status(500).json(error);
+    }
+  },
 };
 
-module.exports = { getAll };
+module.exports = userController;

@@ -23,7 +23,7 @@ const OrderSchema = new mongoose.Schema(
       require: true,
     },
     totalPrice: {
-      order: Number,
+      type: Number,
       require: true,
     },
     promotionCodeId: {

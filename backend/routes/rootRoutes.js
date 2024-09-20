@@ -1,8 +1,24 @@
 const express = require("express");
-const userController = require("../controllers/userController");
+const userRouter = require("./userRoutes");
+const orderRouter = require("./orderRoutes");
+const orderItemRouter = require("./orderItemRoutes");
+const paymentRouter = require("./paymentRoutes");
+const productRouter = require("./productRoutes");
+const promotionCodeRouter = require("./promotionCodeRoutes");
+const typeRouter = require("./typeRoutes");
 
 const router = express.Router();
 
-router.get("/", userController.getAll());
+router.get("/", (req, res) => {
+  res.send("Hello World!");
+});
+
+router.use("/api/user", userRouter);
+router.use("/api/order", orderRouter);
+router.use("/api/orderItem", orderItemRouter);
+router.use("/api/payment", paymentRouter);
+router.use("/api/product", productRouter);
+router.use("/api/promotion", promotionCodeRouter);
+router.use("/api/type", typeRouter);
 
 module.exports = router;
