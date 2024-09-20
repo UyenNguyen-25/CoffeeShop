@@ -22,7 +22,7 @@ import { useNavigate } from "react-router-dom";
 import { useState } from "react";
 import axios from "axios";
 import { BASE_URL } from "@/constants/apiConfig";
-import { emptyCart } from "@/assets/logo";
+import cart from "../../../assets/cart.png";
 import { selectCurrentUser } from "@/redux/features/auth/authSlice";
 import EditAddress from "./EditAddress";
 
@@ -175,12 +175,12 @@ const CartPage = () => {
     }
   };
   return (
-    <div className=" py-9 px-24">
-      <h1 className="text-4xl font-semibold pb-10">Giỏ Hàng</h1>
+    <div className=" py-9 px-24 bg-[#F1DEBC]">
+      <h1 className="text-2xl font-semibold pb-10 mt-10">Giỏ Hàng</h1>
       {cartItems.length === 0 ? (
         <div className="justify-center items-center flex flex-col">
-          <img src={emptyCart} className="w-1/3 mx-auto -mt-10" />
-          <h1 className="text-xl font-semibold">Giỏ hàng hiện đang trống...</h1>
+          <img src={cart} className="w-1/5 mx-auto mt-5 mb-10" />
+          <h1 className="text-xl font-semibold mb-15">Giỏ hàng hiện đang trống...</h1>
           <button
             className="text-base border border-transparent bg-[#E44918] hover:bg-[#d63e12] rounded-full text-white px-6 py-3 mt-6 transition duration-300 transform hover:scale-105 shadow-lg"
             onClick={() => nav("/products?page=1&per_page=8")}
