@@ -4,14 +4,11 @@ import { setCredentials } from "../features/auth/authSlice";
 import { BASE_URL } from "@/constants/apiConfig";
 
 const baseQuery = fetchBaseQuery({
-  baseUrl: "http://localhost:3000",
   baseUrl: BASE_URL,
   credentials: "include",
   mode: "cors",
   prepareHeaders: (headers, { getState }) => {
-    // console.log("getState", getState);
     const token = getState().auth.token;
-    // console.log("token in apiSlice: ", token);
     if (token) {
       headers.set("Authorization", `Bearer ${token}`);
     }
