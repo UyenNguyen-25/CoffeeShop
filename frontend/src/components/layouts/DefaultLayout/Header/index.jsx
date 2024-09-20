@@ -52,9 +52,9 @@ function Header() {
   ];
 
   const routes = [
-    { title: "Trang chủ", path: "/" },
-    { title: "Sản Phẩm", path: "/products" },
-    { title: "Liên hệ", path: "/contact" },
+    { title: "Home", path: "/" },
+    { title: "Product", path: "/products" },
+    { title: "Blog", path: "/blog" },
   ];
 
   return (
