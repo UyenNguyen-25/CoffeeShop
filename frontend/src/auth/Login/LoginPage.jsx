@@ -30,18 +30,8 @@ const Login = () => {
   return (
     <Flex vertical="true" justify="center" align="stretch">
       <Typography.Title level={3} className="font-mono">
-        Vui chào đón ba mẹ
+        Sign in
       </Typography.Title>
-      <Typography.Text className="font-mono">
-        Đăng nhập hoặc
-        <Typography.Link
-          onClick={() => navigate("/register")}
-          className="mx-2 font-mono"
-        >
-          Đăng ký
-        </Typography.Link>
-        ngay tài khoản
-      </Typography.Text>
       <Form
         name="normal_login"
         className="login-form w-full mt-6"

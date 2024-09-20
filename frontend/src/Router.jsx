@@ -5,7 +5,6 @@ import HomePage from "./pages/ShoppingPages/HomePage";
 import DefaultLayout from "./components/layouts/DefaultLayout";
 import AnonymousLayout from "./auth/AnonymousLayout";
 import Login from "./auth/Login/LoginPage";
-import Register from "./auth/Register/RegisterPage";
 import ForgotPassword from "./auth/ForgotPassword/ForgotPassword";
 import DashboardLayout from "./components/layouts/DashboardLayout";
 import ProductDetail from "./pages/ShoppingPages/ProductsPage/ProductDetail/ProductDetail";
@@ -17,18 +16,17 @@ import CartPage from "./pages/ShoppingPages/CartPage/CartPage";
 import ProductManagement from "./pages/DashboardPages/ProductManagement";
 import OrderManagement from "./pages/DashboardPages/OrderManagement";
 import UserManagement from "./pages/DashboardPages/UserManagement";
-import ErrorBoundary from "./components/common/Error";
 import ProductsPage from "./pages/ShoppingPages/ProductsPage";
 import ProtectedRoute from "./routes/ProtectedRoute";
 import SetNewPassword from "./auth/ForgotPassword/SetNewPassword";
 import Profile from "./pages/ProfillePages";
 import ResetToken from "./routes/ResetRoute/index.";
-import CheckPermissionRoute from "./routes/CheckPermission";
 import OrderConfirmationPage from "./pages/ShoppingPages/OrderPage/OrderConfirmation";
 import OrderDetailUser from "./pages/ShoppingPages/OrderPage/OrderDetail/OrderDetail";
 import Dashboard from "./pages/DashboardPages/Dashboard";
 import Prefetch from "./routes/Prefetch";
 import BrandManagement from "./pages/DashboardPages/BrandManagement";
+import ErrorBoundary from "./components/common/Error";
 // import { UserLoader } from "./routes/userRoute";
 
 const router = createBrowserRouter([
@@ -42,7 +40,6 @@ const router = createBrowserRouter([
             <DefaultLayout />
           </ProtectedRoute>
         ),
-        errorElement: <ErrorBoundary />,
         children: [
           {
             index: true,
@@ -97,15 +94,10 @@ const router = createBrowserRouter([
             <AnonymousLayout />
           </ResetToken>
         ),
-        errorElement: <ErrorBoundary />,
         children: [
           {
             path: "login",
             element: <Login />,
-          },
-          {
-            path: "register",
-            element: <Register />,
           },
           {
             path: "forgot-password",
@@ -120,14 +112,11 @@ const router = createBrowserRouter([
       {
         element: (
           <ProtectedRoute>
-            <CheckPermissionRoute>
-              <Prefetch>
-                <DashboardLayout />
-              </Prefetch>
-            </CheckPermissionRoute>
+            <Prefetch>
+              <DashboardLayout />
+            </Prefetch>
           </ProtectedRoute>
         ),
-        errorElement: <ErrorBoundary />,
         path: "dashboard",
         children: [
           {
@@ -162,6 +151,10 @@ const router = createBrowserRouter([
       },
     ],
   },
+  {
+    path: "/*",
+    element: <ErrorBoundary />
+  }
 ]);
 
 export default router;

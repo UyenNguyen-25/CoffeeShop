@@ -46,13 +46,13 @@ export default function HomePage() {
                 Welcome to Coffee Haven!
               </h1>
               <p className="text-xl mt-10 drop-shadow-md">
-              Coffee Shop is the place where you can get flavorful coffee strains  <br /> from global elite brands and roasters at very affordable price.
+                Coffee Shop is the place where you can get flavorful coffee strains  <br /> from global elite brands and roasters at very affordable price.
               </p>
               <button
-                className="text-2xl border border-transparent bg-[#E44918] hover:bg-[#d63e12] rounded-full text-white px-6 py-3 mt-10 transition duration-300 transform hover:scale-105 shadow-lg"
+                className="text-2xl tracking-wider border border-transparent bg-[#E44918] hover:bg-[#d63e12] rounded-full text-white px-7 pt-2 pb-3 mt-10 transition duration-300 transform hover:scale-105 shadow-lg"
                 onClick={() => nav("/products?page=1&per_page=8")}
               >
-                Start Shopping
+                COFFEE NOW
               </button>
             </div>
           </div>
