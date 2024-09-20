@@ -1,9 +1,11 @@
 const User = require("../model/User");
 
-const getAll = (req, res) => {
-  const users = User.find();
+const userController = {
+  getAll: async (req, res) => {
+    const users = await User.find().exec();
 
-  return res.status(200).json(users);
+    return res.json(users);
+  },
 };
 
-module.exports = { getAll };
+module.exports = userController;
