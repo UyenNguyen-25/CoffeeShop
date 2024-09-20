@@ -2,14 +2,14 @@ import { useSendLogoutMutation } from "@/redux/features/auth/authApiSlice";
 import { selectCurrentUser } from "@/redux/features/auth/authSlice";
 import { useGetUserQuery } from "@/redux/features/users/usersApiSlice";
 import { Avatar, Button, Dropdown, Flex } from "antd";
-import { ChevronDown } from "lucide-react";
+import { ChevronDown, Lock } from "lucide-react";
 import { useSelector } from "react-redux";
-import { useNavigate } from "react-router-dom";
+import { NavLink, useNavigate } from "react-router-dom";
 import { toast } from "sonner";
 
 const DropdownCustomize = (props) => {
   // eslint-disable-next-line no-unused-vars
-  const { itemsProps, className } = props;
+  const { itemsProps, className, currentLocation } = props;
   const user = useSelector(selectCurrentUser);
   const { data: userDetail } = useGetUserQuery({ user_phoneNumber: user?.user_phoneNumber },
     {
@@ -57,16 +57,17 @@ const DropdownCustomize = (props) => {
       </Button>
     </Dropdown>
   ) : (
-    <div>
-      {" "}
-      <Button className="text-[#ffffff]" type="link" onClick={() => navigate("/register")}>
-        Đăng ký
-      </Button>
-      /
-      <Button className="text-[#ffffff]" type="link" onClick={() => navigate("/login")}>
-        Đăng nhập
-      </Button>
-    </div>
+    <NavLink
+      to="/login"
+      className="flex items-center gap-2 relative hover:bg-[#7c7c7c36] px-4 py-3 rounded-xl text-[#545454] hover:text-[#545454] lg:text-[17px]"
+      style={({ isActive }) => ({
+        // fontWeight: isActive ? "bold" : "normal",
+        color: currentLocation === "/" ? isActive ? "#DCB485" : "#ffffff" : "#4C2113",
+      })}
+    >
+      <Lock size={21} />
+      <span className="lg:inline hidden">Sign in</span>
+    </NavLink>
   );
 };
 

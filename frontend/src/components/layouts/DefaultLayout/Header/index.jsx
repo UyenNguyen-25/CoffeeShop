@@ -1,7 +1,6 @@
 import {
   ArrowRightLeft,
   LogOut,
-  ReceiptText,
   ShoppingCart,
   User,
 } from "lucide-react";
@@ -16,8 +15,8 @@ function Header() {
   const [scrollPosition, setScrollPosition] = useState(0);
   const currentUser = useSelector(selectCurrentUser);
   const cart = useSelector((state) => state.cart);
-  const currentPath = useLocation();
-  
+  const currentLocation = useLocation()
+
   useEffect(() => {
     const handleScroll = () => {
       setScrollPosition(window.scrollY);
@@ -37,19 +36,13 @@ function Header() {
       label: "Hồ sơ",
       key: "/profile",
       icon: <User />,
-      permission: ["customer", "staff", "manager"]
+      permission: ["staff"]
     },
     {
       label: "Dashboard",
       key: "dashboard",
       icon: <ArrowRightLeft />,
-      permission: ["admin", "staff", "manager"],
-    },
-    {
-      label: "Đơn mua",
-      key: "purchase",
-      icon: <ReceiptText />,
-      permission: ["customer", "staff", "manager"]
+      permission: ["admin", "staff"],
     },
     {
       label: "Đăng xuất",
@@ -66,13 +59,14 @@ function Header() {
 
   return (
     <div
-      className={`fixed top-0 left-0 w-full z-50 transition-colors duration-300 ${
-        scrollPosition > 50 ? 'bg-black shadow-xl' : 'bg-transparent'
-      }`}
+      className={`fixed top-0 left-0 w-full z-50 transition-colors duration-200 ${currentLocation.pathname === "/" ?
+        scrollPosition > 50 ? 'bg-black shadow-xl' : 'bg-transparent' :
+        "bg-[#F1DEBC] relative"
+        }`}
     >
       {/* NavBar */}
-      <div className="flex items-center justify-between p-3 px-6 lg:pl-24 lg:pr-10 text-[#ffffff]">
-        <Link to="/" className="font-bold text-3xl text-[#ffffff]">
+      <div className="flex items-center justify-between p-3 px-6 lg:pl-24 lg:pr-10">
+        <Link to="/" className={`font-bold text-3xl ${currentLocation.pathname === "/" ? "text-[#ffffff]" : "text-[#4C2113]"}`}>
           Coffee Shop
         </Link>
 
@@ -83,7 +77,7 @@ function Header() {
               to={route.path}
               style={({ isActive }) => ({
                 fontWeight: isActive ? "bold" : "normal",
-                color: isActive ? "#DCB485" : "#ffffff",
+                color: currentLocation.pathname === "/" ? isActive ? "#DCB485" : "#ffffff" : "#4C2113",
               })}
               className="text-xl lg:text-[22px]"
             >
@@ -92,20 +86,21 @@ function Header() {
           ))}
         </div>
 
-        <div className="flex items-center gap-2 lg:gap-6 text-sm lg:text-[17px]">
+        <div className="flex items-center gap-2 text-sm lg:text-[17px]">
           {/* Cart */}
-          {currentUser?.user_role.role_description !== "admin" && (
+          {!currentUser && (
             <Badge count={countCart}>
               <NavLink
                 to="/cart"
-                className="flex items-center gap-2 relative hover:bg-[#f2f2f2] p-2 rounded-xl text-[#545454] hover:text-[#545454] lg:text-[17px]"
+                className="flex items-center gap-2 relative  px-4 py-3 rounded-xl lg:text-[17px]"
                 style={({ isActive }) => ({
-                  fontWeight: isActive ? "bold" : "normal",
-                  color: isActive ? "#E44918" : "#545454",
+                  // fontWeight: isActive ? "bold" : "normal",
+                  color: currentLocation.pathname === "/" ? isActive ? "#DCB485" : "#ffffff" : "#4C2113",
+                  backgroundColor: isActive && "#7c7c7c36"
                 })}
               >
-                <ShoppingCart size={21} color="white" />
-                <span className="lg:inline hidden text-white">Giỏ hàng</span>
+                <ShoppingCart size={21} />
+                <span className="lg:inline hidden">Cart</span>
               </NavLink>
             </Badge>
           )}
@@ -114,6 +109,7 @@ function Header() {
           <DropdownCustomize
             itemsProps={itemsProps}
             className="bg-[#fde3cf] text-[#f56a00]"
+            currentLocation={currentLocation.pathname}
           />
         </div>
       </div>

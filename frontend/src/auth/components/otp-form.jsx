@@ -5,56 +5,25 @@ import FormItem from "antd/es/form/FormItem";
 import { useEffect, useState } from "react";
 import OTPInput from "react-otp-input";
 import { useNavigate } from "react-router-dom";
-import { signInWithPhoneNumber } from "firebase/auth";
-import auth from "../firebase/setup";
 import { Otptimer } from "otp-timer-ts";
 import { toast } from "sonner";
-import {
-  useSignupMutation,
-} from "@/redux/features/auth/authApiSlice";
 
 function OtpForm(props) {
-  const { registerInfo, message, path } = props;
+  const { account, message } = props;
   const [form] = useForm();
   const [otp, setOtp] = useState("");
-  const [signup] = useSignupMutation();
   const [isSuccess, setIsSuccess] = useState(false);
+  // eslint-disable-next-line no-unused-vars
   const [errorMessage, setErrorMessage] = useState("");
   const navigate = useNavigate();
 
   const sendOtp = async () => {
-    const appVerifier = window.recaptchaVerifier;
-    const user_phoneNumber = registerInfo?.user_phoneNumber.replace(0, "+84");
+    const user_phoneNumber = account?.user_phoneNumber.replace(0, "+84");
     console.log("user_phoneNumber", user_phoneNumber);
-
-    await signInWithPhoneNumber(auth, user_phoneNumber, appVerifier)
-      .then((confirmation) => {
-        // console.log(confirmation);
-        window.confirmationResult = confirmation;
-        toast.success("Mã OTP đang được gửi tới số điện thoại");
-      })
-      .catch((err) => console.log(err));
   }
 
   const onFinish = async () => {
     setIsSuccess(true);
-    window.confirmationResult
-      .confirm(otp)
-      .then(async () => {
-        try {
-          path.includes("register")
-            && await signup(registerInfo).unwrap()
-          setIsSuccess(true);
-        } catch (error) {
-          console.log(error);
-        }
-        await auth.signOut();
-      })
-      .catch((error) => {
-        // User couldn't sign in (bad verification code?)
-        console.log(error);
-        setErrorMessage(error);
-      });
   };
 
   useEffect(() => {
@@ -65,16 +34,10 @@ function OtpForm(props) {
     if (errorMessage.length > 0) {
       toast.error("Đã xảy ra lỗi");
     }
-    if (isSuccess === true && path.includes("register")) {
+    else if (isSuccess === true) {
       toast.success(message);
       setTimeout(() => {
-        navigate("/login");
-      }, 2000);
-    } else if (isSuccess === true && !path.includes("register")) {
-      console.log(registerInfo);
-      toast.success(message);
-      setTimeout(() => {
-        navigate("/set-new-password", { state: registerInfo });
+        navigate("/set-new-password", { state: account });
       }, 2000);
     }
   }, [isSuccess, errorMessage, navigate]);
@@ -82,11 +45,9 @@ function OtpForm(props) {
   return (
     <Flex vertical="true" align="center" justify="center" gap={10}>
       <Typography.Title level={3}>Nhập mã xác thực</Typography.Title>
-      <Typography>
-        Nhập mã xác thực (4 chữ số) đang gửi đến số điện thoại
-      </Typography>
+
       <Typography.Title level={3}>
-        {registerInfo?.user_phoneNumber}
+        {account?.user_phoneNumber}
       </Typography.Title>
       <Form
         form={form}

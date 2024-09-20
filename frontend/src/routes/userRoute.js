@@ -11,13 +11,8 @@ export const UserLoader = async () => {
       label: "Inactive",
     },
   ];
-  
-  const ROLE_OPTION = [
 
-    {
-      value: "manager",
-      label: "MANAGER",
-    },
+  const ROLE_OPTION = [
     {
       value: "staff",
       label: "STAFF",

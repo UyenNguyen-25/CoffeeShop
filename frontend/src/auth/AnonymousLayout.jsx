@@ -1,48 +1,33 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import Logo from "@/assets/logo";
-import Footer from "@/components/layouts/DefaultLayout/Footer";
-// import { routes } from "@/routes";
-import { Typography } from "antd";
-import { Header } from "antd/es/layout/layout";
 import { ArrowLeft } from "lucide-react";
-import { Outlet, useNavigate } from "react-router-dom";
+import { Link, Outlet, useNavigate } from "react-router-dom";
 
 const AnonymousLayout = () => {
   const navigate = useNavigate();
 
   return (
-    <div className="flex min-h-screen flex-col items-stretch">
-      {/* Header */}
-      <Header className="bg-white text-4xl text-[#545454] ">
-        <div className="w-full h-full flex items-center justify-between font-mono font-semibold">
-          <div className="flex items-center gap-6">
-            {Logo()}
-            {/* {subRouter?.title && (
-              <>
-                <div>|</div> {subRouter.title}
-              </>
-            )} */}
-          </div>
-          <Typography.Link
-            className="flex items-center gap-2 text-lg"
+    <div className="h-screen bg-login-bg bg-cover bg-center bg-no-repeat">
+      {/* Main Content */}
+      <div className="h-full w-full bg-black opacity-50 z-0 absolute"></div>
+      <div className="flex h-full flex-col items-center overflow-y-auto rounded-md">
+        <div className="w-full font-mono z-40 p-8">
+          <Link
+            className="flex items-center gap-2 text-2xl text-white tracking-wider"
             onClick={() => navigate("/")}
           >
-            <ArrowLeft strokeWidth={2.25} size={20} /> Trang chủ
-          </Typography.Link>
+            <ArrowLeft strokeWidth={2.25} size={20} color="#FFF" /> Home
+          </Link>
         </div>
-      </Header>
-      {/* Main Content */}
-      <div className="flex flex-1 justify-center items-center overflow-y-auto bg-login-bg bg-cover rounded-md">
         {/* Dynamic Route Content */}
-        <main className="bg-white min-w-[400px] max-w-[450px] p-6 pb-2 my-10 rounded-lg">
-          <Outlet />
+        <main className="h-[75%] z-50 flex items-center">
+          <div className="bg-white min-w-[400px] max-w-[450px] h-fit p-6 pb-2 rounded-lg">
+            <Outlet />
+          </div>
         </main>
       </div>
       {/* </div> */}
 
-      {/* Footer */}
-      <Footer />
-    </div>
+    </div >
   );
 };
 

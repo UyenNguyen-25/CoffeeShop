@@ -34,7 +34,7 @@ const ForgotPassword = () => {
 
   return show ? (
     <OtpForm
-      registerInfo={phoneNumber}
+      account={phoneNumber}
       message="Xác thực mã OTP thành công"
       path="forgot-pass"
     />

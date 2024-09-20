@@ -4,8 +4,8 @@ import { Button } from "antd";
 const ContactPage = () => {
   return (
     <div>
-      <section className=" dark:bg-gray-900">
-        <div className="max-w-screen-md px-4 py-8 mx-auto lg:py-16">
+      <div className="h-fit w-fit bg-white m-auto shadow-xl">
+        <div className="max-w-screen-md px-10 mx-auto lg:py-10 my-10">
           <h2 className="mb-4 text-4xl font-extrabold tracking-tight text-center text-gray-900 dark:text-white">
             Liên Hệ Chúng Tôi !!!
           </h2>
@@ -63,7 +63,7 @@ const ContactPage = () => {
             </Button>
           </form>
         </div>
-      </section>
+      </div>
     </div>
   );
 };
