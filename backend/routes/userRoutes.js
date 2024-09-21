@@ -1,7 +1,15 @@
 const express = require("express");
 const userController = require("../controllers/userController");
-const userRouter = express.Router();
+const { verifyJWT } = require("../middleware/verifyJWT");
 
-userRouter.get("/get-all-user", userController.getAllUsers);
+const router = express.Router();
 
-module.exports = userRouter;
+router.use(verifyJWT);
+
+router
+  .route("/")
+  .get(userController.getAll)
+  .put(userController.updateUser)
+  .delete(userController.deleteUser);
+
+module.exports = router;

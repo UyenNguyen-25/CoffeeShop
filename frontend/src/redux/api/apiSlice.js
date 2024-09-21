@@ -4,14 +4,11 @@ import { setCredentials } from "../features/auth/authSlice";
 import { BASE_URL } from "@/constants/apiConfig";
 
 const baseQuery = fetchBaseQuery({
-  // baseUrl: "https://con-yeu-g5.vercel.app",
   baseUrl: BASE_URL,
   credentials: "include",
   mode: "cors",
   prepareHeaders: (headers, { getState }) => {
-    // console.log("getState", getState);
     const token = getState().auth.token;
-    // console.log("token in apiSlice: ", token);
     if (token) {
       headers.set("Authorization", `Bearer ${token}`);
     }
@@ -20,10 +17,6 @@ const baseQuery = fetchBaseQuery({
 });
 
 const baseQueryWithReauth = async (args, api, extraOptions) => {
-  // console.log(args) // request url, method, body
-  // console.log(api) // signal, dispatch, getState()
-  // console.log(extraOptions) //custom like {shout: true}
-
   let result = await baseQuery(args, api, extraOptions);
 
   // If you want, handle other status codes, too
