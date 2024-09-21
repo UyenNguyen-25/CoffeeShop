@@ -5,7 +5,7 @@ const fs = require("fs");
 const fsPromises = require("fs").promises;
 const path = require("path");
 
-export const logEvents = async (message, file) => {
+const logEvents = async (message, file) => {
   const dateTime = `${format(new Date(), "yyyMMdd\tHH:mm:ss")}`;
   const logItem = `${dateTime}\t${uuid()}\t${message}\n`;
   console.log(logItem);
@@ -22,8 +22,7 @@ export const logEvents = async (message, file) => {
     console.log(err);
   }
 };
-
-export const logger = (req, res, next) => {
+const logger = (req, res, next) => {
   logEvents(`${req.method}\t${req.headers.origin}\t${req.url}`, "reqLog.txt");
   console.log(`${req.method} ${req.path}`);
   next();
