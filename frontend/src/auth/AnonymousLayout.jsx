@@ -15,7 +15,7 @@ const AnonymousLayout = () => {
             className="flex items-center gap-2 text-2xl text-white tracking-wider"
             onClick={() => navigate("/")}
           >
-            <ArrowLeft strokeWidth={2.25} size={20} color="#FFF" /> Home
+            <ArrowLeft strokeWidth={2.25} size={20} color="#FFF" /> Trang chủ
           </Link>
         </div>
         {/* Dynamic Route Content */}

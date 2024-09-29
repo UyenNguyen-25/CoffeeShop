@@ -50,6 +50,7 @@ function Header() {
       icon: <LogOut />,
     },
   ];
+  console.log(currentUser);
 
   const routes = [
     { title: "Home", path: "/" },
@@ -110,6 +111,7 @@ function Header() {
             itemsProps={itemsProps}
             className="bg-[#fde3cf] text-[#f56a00]"
             currentLocation={currentLocation.pathname}
+            currentUser={currentUser}
           />
         </div>
       </div>

@@ -1,28 +1,18 @@
 import { useSendLogoutMutation } from "@/redux/features/auth/authApiSlice";
-import { selectCurrentUser } from "@/redux/features/auth/authSlice";
-import { useGetUserQuery } from "@/redux/features/users/usersApiSlice";
-import { Avatar, Button, Dropdown, Flex } from "antd";
+import { Avatar, Dropdown, Flex } from "antd";
 import { ChevronDown, Lock } from "lucide-react";
-import { useSelector } from "react-redux";
 import { NavLink, useNavigate } from "react-router-dom";
 import { toast } from "sonner";
 
 const DropdownCustomize = (props) => {
   // eslint-disable-next-line no-unused-vars
-  const { itemsProps, className, currentLocation } = props;
-  const user = useSelector(selectCurrentUser);
-  const { data: userDetail } = useGetUserQuery({ user_phoneNumber: user?.user_phoneNumber },
-    {
-      refetchOnFocus: true,
-      refetchOnMountOrArgChange: true,
-    }
-  )
-  const splitName = userDetail?.user_fullname.split(" ");
+  const { itemsProps, className, currentLocation, currentUser } = props;
+  const splitName = currentUser?.fullName.split(" ");
   const navigate = useNavigate();
   const [sendLogout] = useSendLogoutMutation();
 
   const checkRoleGate = (item) => {
-    return item?.permission.includes(userDetail?.user_role?.role_description?.toLowerCase()) && item;
+    return item?.permission.includes(currentUser?.role?.toLowerCase()) && item;
   };
 
   const checkRoleGateItem = itemsProps
@@ -42,19 +32,18 @@ const DropdownCustomize = (props) => {
     onClick: handleMenuClick,
   };
 
-  return userDetail ? (
-    <Dropdown menu={menuProps} placement="bottomRight" trigger={"click"}>
-      <Button className="border-none h-fit shadow-none">
-        <Flex gap={6} align="center">
-          <Avatar className={className}>
-            {userDetail?.user_fullname === "Ba, mẹ"
-              ? "A"
-              : splitName.slice(-1)[0].charAt(0)}
-          </Avatar>
-          {userDetail?.user_fullname}
-          <ChevronDown />
-        </Flex>
-      </Button>
+  console.log(currentUser);
+
+
+  return currentUser ? (
+    <Dropdown menu={menuProps} placement="bottomRight" trigger={"click"} className={`h-fit ${currentLocation === "/" ? "text-white hover:text-[#DCB485]" : "hover:text-white text-[#4C2113]"} hover:bg-[#7c7c7c36] px-2 py-2 rounded-md`}>
+      <Flex gap={6} align="center">
+        <Avatar>
+          {splitName.slice(-1)[0].charAt(0)}
+        </Avatar>
+        {currentUser?.fullName}
+        <ChevronDown />
+      </Flex>
     </Dropdown>
   ) : (
     <NavLink
