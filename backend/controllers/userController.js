@@ -27,17 +27,26 @@ const userController = {
   },
   createNewUser: async (req, res) => {
     const newUserData = req.body;
+    var phoneNumber;
 
     if (!newUserData) {
       return res.status(400).json({ message: "All fields are required" });
     }
 
-    const duplicatePhone = await User.findOne({
-      phoneNumber: newUserData.phoneNumber,
-    }).exec();
+    if (newUserData.phoneNumber) {
+      phoneNumber =
+        newUserData.phoneNumber.slice(0, 1) === "0"
+          ? newUserData.phoneNumber.replace(0, "84")
+          : newUserData.phoneNumber.slice(0, 2) === "84" &&
+            newUserData.phoneNumber;
 
-    if (duplicatePhone) {
-      return res.status(409).json({ message: "Phone number existed" });
+      const duplicatePhone = await User.findOne({
+        phoneNumber: newUserData.phoneNumber,
+      }).exec();
+
+      if (duplicatePhone) {
+        return res.status(409).json({ message: "Phone number existed" });
+      }
     }
 
     const duplicateEmail = await User.findOne({
@@ -52,6 +61,7 @@ const userController = {
 
     const user = await User.create({
       ...newUserData,
+      phoneNumber,
       password: hashedPwd,
     });
 

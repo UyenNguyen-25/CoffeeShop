@@ -1,5 +1,6 @@
 const User = require("../model/User");
 const bcrypt = require("bcrypt");
+const jwt = require("jsonwebtoken");
 
 require("dotenv").config();
 
@@ -9,21 +10,33 @@ const REFRESH_TOKEN_SECRET = process.env.REFRESH_TOKEN_SECRET;
 const authController = {
   login: async (req, res) => {
     const { phoneNumber, email, password } = req.body;
-    if (!phoneNumber || (!email && !password)) {
+    if ((!phoneNumber || !email) && !password) {
       return res.status(400).json({ message: "All fields are required" });
     }
-    const foundUser = phoneNumber
-      ? await User.findOne({
-          phoneNumber,
-        })
-      : await User.findOne({
-          email,
-        });
+
+    var foundUser;
+
+    if (phoneNumber) {
+      console.log(phoneNumber.slice(0, 2));
+
+      foundUser = await User.findOne({
+        phoneNumber:
+          phoneNumber.slice(0, 1) === "0"
+            ? phoneNumber.replace(0, "84")
+            : phoneNumber.slice(0, 2) === "84" && phoneNumber,
+      });
+    } else {
+      foundUser = await User.findOne({
+        email,
+      });
+    }
+
     if (!foundUser) {
       return res.status(404).json({ message: "User Not Found" });
     }
+
     bcrypt.compare(password, foundUser.password, async (err, response) => {
-      if (!response) {
+      if (err) {
         return res.status(401).json({ message: "Unauthorized" });
       }
       const accessToken = jwt.sign(
