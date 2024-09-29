@@ -6,6 +6,11 @@ const OrderSchema = new mongoose.Schema(
       type: String,
       require: true,
     },
+    orderItems: [{
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "OrderItem",
+      required: true,
+    }],
     email: {
       type: String,
       require: true,
@@ -26,9 +31,9 @@ const OrderSchema = new mongoose.Schema(
       type: Number,
       require: true,
     },
-    promotionCodeId: {
-      type: mongoose.Types.ObjectId,
-      ref: "promotionCode",
+    discountAmount: {
+      type: Number,
+      default: 0, 
     },
   },
   { timestamps: true }

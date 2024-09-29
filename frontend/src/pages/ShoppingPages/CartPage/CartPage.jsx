@@ -16,7 +16,7 @@ import {
   increaseQuantity,
   removeFromCart,
 } from "@/redux/features/cart/cartSlice";
-import { Button, message, Popconfirm } from "antd";
+import { Alert, Button, Input, message, Popconfirm, Space } from "antd";
 import AddAddress from "./AddAddress";
 import { useNavigate } from "react-router-dom";
 import { useState } from "react";
@@ -25,6 +25,8 @@ import { BASE_URL } from "@/constants/apiConfig";
 import cart from "../../../assets/cart.png";
 import { selectCurrentUser } from "@/redux/features/auth/authSlice";
 import EditAddress from "./EditAddress";
+import Icon from "@ant-design/icons/lib/components/Icon";
+import { Trash2 } from "lucide-react";
 
 const CartPage = () => {
   const nav = useNavigate();
@@ -32,7 +34,14 @@ const CartPage = () => {
   const userDetail = useSelector(selectCurrentUser);
   const [paymentMethod, setPaymentMethod] = useState("COD");
   const [shippingAddress, setShippingAddress] = useState(null);
+  const [shippingInfo, setShippingInfo] = useState(null);
   const [userAddress, setUserAddress] = useState(null);
+  const [discount, setDiscount] = useState();
+  const [errorMessage, setErrorMessage] = useState('');
+  const [types, setTypes] = useState([]);
+  const [totalAmount, setTotalAmount] = useState(0);
+  const [discountAmount, setDiscountAmount] = useState();
+  const [isDiscountApplied, setIsDiscountApplied] = useState(false);
   const [text, setText] = React.useState("https://ant.design/");
   const cartItems = useSelector((state) => state.cart.items);
   const dispatch = useDispatch();
@@ -40,71 +49,90 @@ const CartPage = () => {
     style: "currency",
     currency: "VND",
   });
+
+  // const validDiscountCode = 'hoadat';
+
   const temporaryTotal = cartItems.reduce(
-    (total, item) => total + item.product_price * item.quantity,
+    (total, item) => total + item.price * item.quantity,
     0
   );
-  console.log(token)
-  console.log('user', userDetail)
 
-  // useEffect(() => {
-  //   const storedAddress = localStorage.getItem('shippingAddress');
-  //   console.log('storedAddress', storedAddress)
-  //   if (storedAddress) {
-  //     setShippingAddress(JSON.parse(storedAddress));
-  //   }
-  // }, []);
+  const shippingFee = shippingInfo?.fee || 0;
 
   useEffect(() => {
-    if (userDetail?.user_id) {
-      fetchShippingAddress();
-    }
-  }, [userDetail?.user_id, token]);
+    setTotalAmount(temporaryTotal + shippingFee);
+  }, [temporaryTotal, shippingFee]);
 
-
-  const fetchShippingAddress = async () => {
-    console.log('userDetail?.user_id', userDetail?.user_id)
+  const handleApply = async () => {
     try {
-      const response = await axios.post(
-        `${BASE_URL}/api/user/get-user-address`,
-        { user_id: userDetail?.user_id },
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
+      const response = await axios.get(`${BASE_URL}/api/promotion/promotion-code/${discount}`);
+      const promotionCode = response.data;
+      setDiscountAmount(temporaryTotal * promotionCode.discount);
+  
+      if (promotionCode) {
+        const isCodeValid = new Date(promotionCode.expireDate) > new Date();
+  
+        if (isCodeValid) {
+          setTotalAmount(temporaryTotal * (1 - promotionCode.discount) + shippingFee);
+          setIsDiscountApplied(true);
+          message.success('Discount applied successfully!');
+        } else {
+          setIsDiscountApplied(false);
+          message.error('Discount code has expired.');
         }
-      );
-      console.log('response.data', response)
-      if (response.data) {
-        console.log('response.data', response.data)
-        setShippingAddress(response.data.address);
       } else {
-        setShippingAddress(null);
+        setIsDiscountApplied(false);
+        message.error('Invalid discount code.');
       }
     } catch (error) {
-      console.error("Error fetching shipping address:", error);
-      setShippingAddress(null);
+      console.error("Error fetching discount code:", error);
+      message.error("Failed to apply discount code.");
+      setIsDiscountApplied(false);
     }
   };
+  
+  console.log('cart', cartItems)
 
-  const fetchProductDetails = async (productId) => {
-    try {
-      const response = await axios.get(`${BASE_URL}/api/product/get-product-by-id/${productId}`);
-      return response.data.product;
-    } catch (error) {
-      console.error(`Failed to fetch product details for product_id ${productId}`, error);
-      return null;
+  useEffect(() => {
+    const storedAddress = localStorage.getItem('shippingAddress');
+    console.log('storedAddress', storedAddress)
+    if (storedAddress) {
+      setShippingAddress(JSON.parse(storedAddress));
     }
-  };
+  }, []);
 
-  console.log('ShippingAddressssssssssssssss', shippingAddress)
+  useEffect(() => {
+    if (shippingAddress) {
+      setShippingInfo({
+        fee: shippingAddress.shippingFee,
+      });
+    }
+  }, [shippingAddress]);
+
+  useEffect(() => {
+    const storedShippingInfo = JSON.parse(localStorage.getItem('shippingInfo'));
+    if (storedShippingInfo) {
+      setShippingInfo(storedShippingInfo);
+    }
+  }, []);
+
+  useEffect(() => {
+    const fetchTypes = async () => {
+      try {
+        const response = await axios.get(`${BASE_URL}/api/type/get-all-type`);
+        setTypes(response.data);
+      } catch (error) {
+        console.error("Fail to fetch types", error);
+      }
+    };
+    fetchTypes();
+  }, []);
 
   const handleDecrease = (productId) => {
     dispatch(decreaseQuantity(productId));
   };
 
   const handleIncrease = async (productId) => {
-    console.log('first')
     dispatch(increaseQuantity(productId));
   };
 
@@ -123,52 +151,53 @@ const CartPage = () => {
     }
 
     const orderItems = cartItems.map((item) => ({
-      product_id: item._id,
+      productId: item._id,
       quantity: item.quantity,
+      price: item.price,
+      typeId: item.typeId
     }));
 
     const orderData = {
-      user_id: userDetail?.user_id,
-      order_items: orderItems,
+      email: shippingAddress.email,
+      phoneNumber: shippingAddress.phone,
+      fullName: shippingAddress.name,
+      shippingFee,
+      totalPrice: temporaryTotal,
+      orderItems: orderItems,
       payment_method: paymentMethod,
-      shippingAddress,
-      isDefaulf: shippingAddress?.updatedAddress
+      shippingAddress: shippingAddress.fullAddress,
+      discountAmount: discountAmount
     };
     console.log('order data', orderData)
 
     try {
       const response = await axios.post(
-        `${BASE_URL}/api/order/create-new-order`,
-        orderData,
-        {
-          headers: {
-            Authorization: `Bearer ${token}`
-          }
-        }
+        `${BASE_URL}/api/order/create-order`, orderData
       );
+      console.log('response', response)
 
-      if (response.status === 201) {
-        if (paymentMethod === "COD") {
-          message.success("Đặt hàng thành công!");
-          dispatch(clearCart());
-          nav(`/order-confirmation?orderId=${response.data._id}`);
-        } else if (paymentMethod === "momo") {
-          const momoData = {
-            orderId: response.data._id,
-            amount: response.data.total_money,
-          };
-          const momoResponse = await axios.post(`${BASE_URL}/api/momo/payment`, momoData);
-          if (momoResponse.data && momoResponse.data.payUrl) {
-            window.location.href = momoResponse.data.payUrl;
-            dispatch(clearCart());
-          } else {
-            console.error("Thanh toán MoMo không thành công:", momoResponse.data);
-            message.error("Thanh toán MoMo không thành công");
-          }
-        }
-      } else {
-        message.error("Đặt hàng thất bại, vui lòng thử lại");
-      }
+      // if (response.status === 201) {
+      //   if (paymentMethod === "COD") {
+      //     message.success("Đặt hàng thành công!");
+      //     dispatch(clearCart());
+      //     nav(`/order-confirmation?orderId=${response.data._id}`);
+      //   } else if (paymentMethod === "momo") {
+      //     const momoData = {
+      //       orderId: response.data._id,
+      //       amount: response.data.total_money,
+      //     };
+      //     const momoResponse = await axios.post(`${BASE_URL}/api/momo/payment`, momoData);
+      //     if (momoResponse.data && momoResponse.data.payUrl) {
+      //       window.location.href = momoResponse.data.payUrl;
+      //       dispatch(clearCart());
+      //     } else {
+      //       console.error("Thanh toán MoMo không thành công:", momoResponse.data);
+      //       message.error("Thanh toán MoMo không thành công");
+      //     }
+      //   }
+      // } else {
+      //   message.error("Đặt hàng thất bại, vui lòng thử lại");
+      // }
     } catch (error) {
       console.error("Lỗi khi đặt hàng:", error);
       message.error("Đặt hàng thất bại, vui lòng thử lại");
@@ -190,38 +219,43 @@ const CartPage = () => {
         </div>
       ) : (
         <div className="flex gap-6">
-          <div className="w-4/5 bg-white py-9 px-6 shadow-lg rounded-lg">
+          <div className="w-3/5 bg-white py-9 px-6 shadow-lg rounded-lg">
             <Table>
               <TableHeader>
                 <TableRow>
-                  <TableHead className="w-[300px] text-lg text-[#8B8B8B]">
+                  <TableHead className="w-[300px] text-base text-[#8B8B8B] text-left">
                     Sản phẩm
                   </TableHead>
-                  <TableHead className="w-[100px] text-lg text-[#8B8B8B]">
+                  <TableHead className="w-[100px] text-base text-[#8B8B8B] text-center">
                     Đơn giá
                   </TableHead>
-                  <TableHead className="w-[100px] text-lg text-[#8B8B8B]">
+                  <TableHead className="w-[100px] text-base text-[#8B8B8B] text-center">
                     Số lượng
                   </TableHead>
-                  <TableHead className="w-[150px] text-lg text-[#8B8B8B]">
+                  <TableHead className="w-[150px] text-base text-[#8B8B8B] text-center">
                     Thành tiền
                   </TableHead>
                 </TableRow>
               </TableHeader>
               <TableBody>
                 {cartItems.map((item) => (
-                  <TableRow key={item.id}>
-                    <TableCell className="flex">
-                      <img className="w-24" src={item.product_img} />
-                      <p className="w-full flex items-center font-medium text-base">
-                        {item.product_name}
+                  <TableRow key={item.id} className="align-middle">
+                    <TableCell className="flex items-center gap-3">
+                      <img className="w-24 h-24 object-cover" src={item.img[0]} alt={item.name} />
+                      <div className="flex flex-col gap-3">
+                      <p className="w-full flex items-center font-normal text-base text-left">
+                        {item.name}
                       </p>
+                      <div className="text-[rgba(0,0,0,.54)]">
+                      <p>Phân Loại Hàng: </p>
+                      <p>{types.find(type => type._id === item?.typeId)?.name || "Không xác định"}</p>
+                      </div>
+                      </div>
                     </TableCell>
-                    <TableCell className="text-base font-semibold">
-                      {formatter.format(item.product_price)}
+                    <TableCell className="text-base font-semibold text-center">
+                      {formatter.format(item.price)}
                     </TableCell>
-                    {/* <TableCell className="text-lg">{item.quantity}</TableCell> */}
-                    <TableCell>
+                    <TableCell className="text-center">
                       <div className="flex gap-x-0">
                         <button
                           className="bg-[#E5E9EB] w-7 py-1 rounded-l-full font-bold"
@@ -229,7 +263,7 @@ const CartPage = () => {
                         >
                           <MinusOutlined />
                         </button>
-                        <p className="bg-[#E5E9EB] text-center py-1 w-7 text-xl">
+                        <p className="bg-[#E5E9EB] text-center py-1 w-7 text-base">
                           {item.quantity}
                         </p>
                         <button
@@ -240,27 +274,31 @@ const CartPage = () => {
                         </button>
                       </div>
                     </TableCell>
-                    <TableCell className="text-base font-semibold ">
-                      {formatter.format(item.product_price * item.quantity)}
-                      <Popconfirm
-                        className="ml-6"
-                        title="Xóa sản phẩm khỏi giỏ hàng?"
-                        onConfirm={() => confirm(item._id)}
-                        onCancel={cancel}
-                        okText="Ok"
-                        cancelText="Hủy"
-                      >
-                        <Button danger>Xóa</Button>
-                      </Popconfirm>
+                    <TableCell className="text-base font-semibold text-center">
+                      <div className="flex gap-2 items-center">
+                        <span>{formatter.format(item.price * item.quantity)}</span>
+                        <Popconfirm
+                          title="Xóa sản phẩm khỏi giỏ hàng?"
+                          onConfirm={() => confirm(item._id)}
+                          onCancel={cancel}
+                          okText="Ok"
+                          cancelText="Hủy"
+                        >
+                          <button className="ml-4 text-red-600">
+                            <Trash2 color="#FF0000" />
+                          </button>
+                        </Popconfirm>
+                      </div>
                     </TableCell>
                   </TableRow>
                 ))}
               </TableBody>
             </Table>
+
           </div>
           <div className="flex flex-col gap-6 w-1/3">
             <div className="rounded-lg bg-white p-6 shadow-lg">
-              {shippingAddress?.updatedAddress && shippingAddress?.address_line1?.length != 0 ? (
+              {shippingAddress ? (
                 <>
                   <div className="flex gap-12">
                     <h1 className="text-xl font-bold mb-2">Địa Chỉ Nhận Hàng</h1>
@@ -269,26 +307,11 @@ const CartPage = () => {
                   <div className=" flex justify-center gap-3 p-3 rounded-lg">
                     <div>
                       <div className="flex gap-2 mb-1">
-                        <p className="text-lg font-semibold">{shippingAddress?.fullname} | </p>
-                        <p className="text-lg text-orange-600 font-bold">{shippingAddress?.phoneNumber}</p>
+                        <p className="text-lg font-semibold">{shippingAddress?.name} | </p>
+                        <p className="text-lg text-orange-600 font-bold">{shippingAddress?.phone}</p>
                       </div>
-                      <p>{shippingAddress?.address_line1}</p>
-                    </div>
-                  </div>
-                </>
-              ) : !shippingAddress?.updatedAddress && shippingAddress?.address_line2?.length != 0 ? (
-                <>
-                  <div className="flex gap-12">
-                    <h1 className="text-xl font-bold mb-2">Địa Chỉ Nhận Hàng</h1>
-                    <EditAddress setShippingAddress={setShippingAddress} shippingAddress={shippingAddress} />
-                  </div>
-                  <div className=" flex justify-center gap-3 p-3 rounded-lg">
-                    <div>
-                      <div className="flex gap-2 mb-1">
-                        <p className="text-lg font-semibold">{shippingAddress?.fullname} | </p>
-                        <p className="text-lg text-orange-600 font-bold">{shippingAddress?.phoneNumber}</p>
-                      </div>
-                      <p>{shippingAddress?.address_line2}</p>
+                      <p className="my-3">Email: {shippingAddress?.email}</p>
+                      <p>{shippingAddress?.fullAddress}</p>
                     </div>
                   </div>
                 </>
@@ -300,6 +323,25 @@ const CartPage = () => {
                   </div>
                 </>
               )}
+            </div>
+
+            <div className="rounded-lg bg-white p-6 shadow-lg flex flex-col gap-2">
+              <p className="text-xl font-bold mb-2">Mã giảm giá</p>
+              <Space.Compact style={{ width: '100%' }}>
+                <Input placeholder="Nhập mã giảm giá" onChange={(e) => setDiscount(e.target.value)} />
+                <Button className=" bg-[#4C2113] text-[white] hover:bg-[#9e472a]" onClick={handleApply}>Áp dụng</Button>
+              </Space.Compact>
+              {/* <p className={`mt-2 ${errorMessage.includes('hợp lệ') ? 'text-green-500' : 'text-red-500'}`}>
+        {errorMessage}
+      </p> */}
+              {
+                isDiscountApplied ? (
+                  <Alert message="Đã giảm giá" type="success" showIcon />
+                ) : (
+                  <Alert message="Chưa áp dụng" type="error" showIcon />
+                )
+              }
+
             </div>
 
             <div className="rounded-lg bg-white p-6 shadow-lg flex flex-col gap-2">
@@ -330,18 +372,22 @@ const CartPage = () => {
 
             <div className="rounded-lg bg-white p-6 shadow-lg">
               <Table>
-                <TableBody className="text-lg">
+                <TableBody className="text-base">
                   <TableRow>
                     <TableCell className="text-[#8B8B8B]">Tính tạm</TableCell>
                     <TableCell>{formatter.format(temporaryTotal)}</TableCell>
                   </TableRow>
                   <TableRow>
                     <TableCell className="text-[#8B8B8B]">Phí vận chuyển</TableCell>
-                    <TableCell>+{formatter.format(0)}</TableCell>
+                    <TableCell>+{formatter.format(shippingFee)}</TableCell>
+                  </TableRow>
+                  <TableRow>
+                    <TableCell className="text-[#8B8B8B]">Giảm giá</TableCell>
+                    <TableCell>{isDiscountApplied ? `-${formatter.format(temporaryTotal * 0.1)}` : formatter.format(0)}</TableCell>
                   </TableRow>
                   <TableRow>
                     <TableCell className="text-[#8B8B8B]">Tổng tiền</TableCell>
-                    <TableCell>{formatter.format(temporaryTotal)}</TableCell>
+                    <TableCell>{formatter.format(totalAmount)}</TableCell>
                   </TableRow>
                 </TableBody>
               </Table>

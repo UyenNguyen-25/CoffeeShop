@@ -10,6 +10,7 @@ import { useEffect, useState } from "react";
 import DropdownCustomize from "../../../common/components/dropdown";
 import { useSelector } from "react-redux";
 import { selectCurrentUser } from "@/redux/features/auth/authSlice";
+import logo from "../../../../assets/logo-removebg.png" 
 
 function Header() {
   const [scrollPosition, setScrollPosition] = useState(0);
@@ -65,9 +66,9 @@ function Header() {
         }`}
     >
       {/* NavBar */}
-      <div className="flex items-center justify-between p-3 px-6 lg:pl-24 lg:pr-10">
-        <Link to="/" className={`font-bold text-3xl ${currentLocation.pathname === "/" ? "text-[#ffffff]" : "text-[#4C2113]"}`}>
-          Coffee Shop
+      <div className="flex items-center justify-between p-1 px-6 lg:pl-24 lg:pr-10">
+        <Link to="/" className={` w-[10%] ${currentLocation.pathname === "/" ? "text-[#ffffff]" : "text-[#4C2113]"}`}>
+        <img src={logo} className=""/>
         </Link>
 
         <div className="flex space-x-5 lg:space-x-16">
