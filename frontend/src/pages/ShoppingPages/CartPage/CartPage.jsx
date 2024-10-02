@@ -50,7 +50,6 @@ const CartPage = () => {
     currency: "VND",
   });
 
-  // const validDiscountCode = 'hoadat';
 
   const temporaryTotal = cartItems.reduce(
     (total, item) => total + item.price * item.quantity,
@@ -176,28 +175,31 @@ const CartPage = () => {
       );
       console.log('response', response)
 
-      // if (response.status === 201) {
-      //   if (paymentMethod === "COD") {
-      //     message.success("Đặt hàng thành công!");
-      //     dispatch(clearCart());
-      //     nav(`/order-confirmation?orderId=${response.data._id}`);
-      //   } else if (paymentMethod === "momo") {
-      //     const momoData = {
-      //       orderId: response.data._id,
-      //       amount: response.data.total_money,
-      //     };
-      //     const momoResponse = await axios.post(`${BASE_URL}/api/momo/payment`, momoData);
-      //     if (momoResponse.data && momoResponse.data.payUrl) {
-      //       window.location.href = momoResponse.data.payUrl;
-      //       dispatch(clearCart());
-      //     } else {
-      //       console.error("Thanh toán MoMo không thành công:", momoResponse.data);
-      //       message.error("Thanh toán MoMo không thành công");
-      //     }
-      //   }
-      // } else {
-      //   message.error("Đặt hàng thất bại, vui lòng thử lại");
-      // }
+      if (response.status === 201) {
+        if (paymentMethod === "COD") {
+          message.success("Đặt hàng thành công!");
+          dispatch(clearCart());
+          nav(`/order-confirmation?orderId=${response.data._id}`);
+        } else if (paymentMethod === "momo") {
+          const payosData = {
+            orderId: response.data._id,
+            // amount: response.data.totalPrice,
+            amount: 2000,
+          };
+          console.log('payosData', payosData);
+          const payosResponse = await axios.post(`${BASE_URL}/api/payment/create-payment`, payosData);
+          console.log('payosResponse', payosResponse)
+          if (payosResponse.data && payosResponse.data.payUrl) {
+            window.location.href = payosResponse.data.payUrl;
+            dispatch(clearCart());
+          } else {
+            console.error("Thanh toán PayOS không thành công:", payosResponse.data);
+            message.error("Thanh toán PayOS không thành công");
+          }
+        }
+      } else {
+        message.error("Đặt hàng thất bại, vui lòng thử lại");
+      }
     } catch (error) {
       console.error("Lỗi khi đặt hàng:", error);
       message.error("Đặt hàng thất bại, vui lòng thử lại");
@@ -391,7 +393,7 @@ const CartPage = () => {
                   </TableRow>
                 </TableBody>
               </Table>
-              <button className="bg-[#4C2113] hover:bg-blue-700 text-white rounded-lg w-full py-3 font-semibold mt-4" onClick={handlePayment}>
+              <button className="bg-[#4C2113] hover:bg-[#d46e4b] text-white rounded-lg w-full py-3 font-semibold mt-4" onClick={handlePayment}>
                 ĐẶT HÀNG
               </button>
             </div>

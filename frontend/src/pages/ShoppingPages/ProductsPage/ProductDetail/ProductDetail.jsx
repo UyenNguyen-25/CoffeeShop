@@ -85,6 +85,8 @@ const ProductDetail = () => {
     }
   };
   console.log("llllllllllllll", quantity);
+  console.log("detail", detail);
+  console.log("selectedType", selectedType);
 
   return (
     <div className=" px-24 py-6">
@@ -122,8 +124,9 @@ const ProductDetail = () => {
             <div className="flex">
               <div className="grid grid-cols-2 gap-3">
                 {
-                  detail?.img.map((img) => (
+                  detail?.img.map((img, index) => (
                     <img
+                    key={index}
                       className=""
                       src={img}
                     />
@@ -134,7 +137,7 @@ const ProductDetail = () => {
               <div className="ml-10 flex flex-col gap-y-6">
                 <p className="text-xl font-bold">{detail?.name}</p>
                 <div className=" text-red-600 py-2 pl-7 text-xl font-medium border-t-2 border-b-2 border-dotted">
-                  {formatter.format(detail?.price + (types.find((type) => type._id === selectedType).price || 0))}
+                  {formatter.format(detail?.price + (types.find((type) => type._id === selectedType)?.price || 0))}
                 </div>
                 {/* <div className="text-xl">
                   Kho: {detail.quantity > 0 ? detail.quantity : <img className="w-1/2" src={soldout}/>}

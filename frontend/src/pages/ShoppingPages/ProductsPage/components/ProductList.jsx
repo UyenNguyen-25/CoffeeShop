@@ -7,13 +7,23 @@ const ProductList = ({ product }) => {
   });
   console.log("product list", product);
   return (
-    <div className="grid grid-cols-5 gap-4 mt-4 mb-7">
+    <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4 mt-4 mb-7">
       {product?.map((item, index) => (
+        <Link key={index} to={`/product/${item._id}`}>
         <div key={index} className="bg-white shadow-2xl rounded-xl h-[350px]">
           <img
             className="rounded-t-xl "
             src={item.img[0]}
             alt={item.name}
+            onMouseOver={e => {
+              console.log('Hovering over image', item.img[1]);
+              e.currentTarget.src = item.img[1] || item.img[0]
+            }}
+            onMouseOut={e => {
+              console.log('Mouse out');
+              e.currentTarget.src = item.img[0]
+            }}
+
           />
           <div className="px-6 mt-3">
             <Link
@@ -50,6 +60,7 @@ const ProductList = ({ product }) => {
             </div>
           </div>
         </div>
+        </Link>
       ))}
     </div>
   );

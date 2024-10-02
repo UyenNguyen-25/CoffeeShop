@@ -3,12 +3,12 @@ const mongoose = require("mongoose");
 const OrderSchema = new mongoose.Schema(
   {
     orderCode: {
-      type: String,
+      type: Number,
       require: true,
     },
     orderItems: [{
       type: mongoose.Schema.Types.ObjectId,
-      ref: "OrderItem",
+      ref: "orderItem",
       required: true,
     }],
     email: {
@@ -34,6 +34,14 @@ const OrderSchema = new mongoose.Schema(
     discountAmount: {
       type: Number,
       default: 0, 
+    },
+    shippingAddress: {
+      type: String,
+      require: true,
+    },
+    status: {
+      type: String,
+      require: true,
     },
   },
   { timestamps: true }
