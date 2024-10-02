@@ -37,11 +37,6 @@ const CustomTable = ({ list, Loading, refetch }) => {
         }
     };
 
-    // const handleDropdownRender = (status) => {
-    //     return <div className="bg-white min-w-[90px] text-center shadow-2xl rounded-lg flex flex-col space-y-2 p-2">
-
-    //     </div>
-    // }
     const updateStatus = async (value, order_id) => {
         // console.log(order_id);
         if (value !== "accept" && value !== "reject") {

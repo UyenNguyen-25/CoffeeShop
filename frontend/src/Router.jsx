@@ -18,7 +18,6 @@ import UserManagement from "./pages/DashboardPages/UserManagement";
 import ProductsPage from "./pages/ShoppingPages/ProductsPage";
 import ProtectedRoute from "./routes/ProtectedRoute";
 import SetNewPassword from "./auth/ForgotPassword/SetNewPassword";
-import Profile from "./pages/ProfillePages";
 import ResetToken from "./routes/ResetRoute/index.";
 import OrderConfirmationPage from "./pages/ShoppingPages/OrderPage/OrderConfirmation";
 import OrderDetailUser from "./pages/ShoppingPages/OrderPage/OrderDetail/OrderDetail";
@@ -27,7 +26,7 @@ import Prefetch from "./routes/Prefetch";
 import BrandManagement from "./pages/DashboardPages/BrandManagement";
 import ErrorBoundary from "./components/common/Error";
 import BlogPage from "./pages/ShoppingPages/BlogPage";
-// import { UserLoader } from "./routes/userRoute";
+import MixCoffeePage from "./pages/ShoppingPages/MixCoffeePage";
 
 const router = createBrowserRouter([
   {
@@ -51,7 +50,7 @@ const router = createBrowserRouter([
             children: [],
           },
           {
-            path: "products/:id",
+            path: "product/:id",
             element: <ProductDetail />,
           },
           {
@@ -78,8 +77,8 @@ const router = createBrowserRouter([
             element: <BlogPage />,
           },
           {
-            path: "profile",
-            element: <Profile />,
+            path: "mix-coffee",
+            element: <MixCoffeePage />,
           },
           {
             path: "order-confirmation",
@@ -141,7 +140,6 @@ const router = createBrowserRouter([
           },
           {
             path: "users-management",
-            // loader: <UserLoader />,
             shouldRevalidate: ({ currentUrl, nextUrl }) =>
               currentUrl.pathname !== nextUrl.pathname,
             element: <UserManagement />,

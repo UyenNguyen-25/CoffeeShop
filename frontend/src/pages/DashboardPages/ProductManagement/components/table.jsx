@@ -42,7 +42,7 @@ const TableProduct = ({ showEditModal, filteredData, setFilteredData }) => {
   const fetchProducts = async () => {
     try {
       const response = await axios.get(
-        `${BASE_URL}/api/product/get-all-product`
+        `${BASE_URL}api/product/get-all-product`
       );
       setProducts(response.data);
       setFilteredData(response.data);

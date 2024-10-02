@@ -83,7 +83,7 @@ const authController = {
   },
   refresh: async (req, res) => {
     const cookies = req.cookies;
-    // console.log("req.cookies: ", req.cookies);
+    console.log("req.cookies: ", req.cookies);
 
     if (!cookies?.jwt) return res.status(401).json({ message: "Unauthorized" });
 
@@ -93,13 +93,14 @@ const authController = {
       if (err) return res.status(403).json({ message: "Forbidden" });
       console.log("decoded: ", decoded);
 
-      const foundUser = decoded.phoneNumber
-        ? await User.findOne({
-            phoneNumber: decoded.phoneNumber,
-          })
-        : await User.findOne({
-            email: decoded.email,
-          });
+      const userInfo = { ...decoded.UserInfo };
+
+      const foundUser = await User.findOne({
+        phoneNumber:
+          userInfo.phoneNumber.slice(0, 1) === "0"
+            ? userInfo.phoneNumber.replace(0, "84")
+            : userInfo.phoneNumber.slice(0, 2) === "84" && userInfo.phoneNumber,
+      });
 
       if (!foundUser) return res.status(401).json({ message: "Unauthorized" });
 

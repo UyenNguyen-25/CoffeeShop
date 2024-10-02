@@ -10,10 +10,8 @@ function DefaultLayout() {
 
       {/* Main Content */}
       <div className="flex-1 overflow-y-auto bg-customer-home">
-        <main>
-          {/* Dynamic Route Content */}
-          <Outlet />
-        </main>
+        {/* Dynamic Route Content */}
+        <Outlet />
       </div>
       {/* </div> */}
 

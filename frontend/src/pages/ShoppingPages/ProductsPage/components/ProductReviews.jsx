@@ -17,7 +17,7 @@ const ProductReviews = ({ product }) => {
 
     return (
         <div className="bg-white shadow rounded-lg p-6">
-            <div className="bg-[#E7F3FF] py-4 pl-7 text-2xl font-bold mt-5">
+            <div className="bg-[#F1DEBC] py-4 pl-7 text-2xl font-bold mt-5">
                 ĐÁNH GIÁ SẢN PHẨM
             </div>
             {product.feedback_id?.length > 0 ? (

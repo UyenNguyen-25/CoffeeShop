@@ -12,7 +12,7 @@ export const ordersApiSlice = apiSlice.injectEndpoints({
   endpoints: (builder) => ({
     getOrders: builder.query({
       query: (arg) => ({
-        url: `${ORDERS_URL}/get-all-order/?phoneNumber=${arg.user_phoneNumber}&status=${arg.status}&from=${arg.from}&to=${arg.to}`,
+        url: `${ORDERS_URL}/get-all-order/?phoneNumber=${arg?.user_phoneNumber}&status=${arg?.status}&from=${arg?.from}&to=${arg?.to}`,
       }),
       invalidatesTags: [{ type: "Order", id: "LIST" }],
     }),
@@ -31,6 +31,11 @@ export const ordersApiSlice = apiSlice.injectEndpoints({
         url: `${ORDERS_URL}/get-order-detail/${arg.order_id}`,
       }),
     }),
+    getOrderByMonth: builder.query({
+      query: (arg) => ({
+        url: `${ORDERS_URL}/get-order-by-month`,
+      }),
+    }),
   }),
 });
 
@@ -38,4 +43,5 @@ export const {
   useGetOrdersQuery,
   useUpdateOrderStatusMutation,
   useGetOrderItemQuery,
+  useGetOrderByMonthQuery,
 } = ordersApiSlice;

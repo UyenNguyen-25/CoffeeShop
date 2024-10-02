@@ -1,12 +1,12 @@
 import { useSendLogoutMutation } from "@/redux/features/auth/authApiSlice";
 import { Avatar, Dropdown, Flex } from "antd";
-import { ChevronDown, Lock } from "lucide-react";
+import { ArrowRightLeft, ChevronDown, Lock, LogOut } from "lucide-react";
 import { NavLink, useNavigate } from "react-router-dom";
 import { toast } from "sonner";
 
 const DropdownCustomize = (props) => {
   // eslint-disable-next-line no-unused-vars
-  const { itemsProps, className, currentLocation, currentUser } = props;
+  const { className, currentLocation, currentUser } = props;
   const splitName = currentUser?.fullName.split(" ");
   const navigate = useNavigate();
   const [sendLogout] = useSendLogoutMutation();
@@ -14,6 +14,26 @@ const DropdownCustomize = (props) => {
   const checkRoleGate = (item) => {
     return item?.permission.includes(currentUser?.role?.toLowerCase()) && item;
   };
+
+  const itemsProps = [
+    // {
+    //   label: "Hồ sơ",
+    //   key: "/profile",
+    //   icon: <User />,
+    //   permission: ["staff"]
+    // },
+    {
+      label: "Dashboard",
+      key: "dashboard",
+      icon: <ArrowRightLeft />,
+      permission: ["admin", "staff"],
+    },
+    {
+      label: "Đăng xuất",
+      key: "/login",
+      icon: <LogOut />,
+    },
+  ];
 
   const checkRoleGateItem = itemsProps
     .map((item) => (item?.permission ? checkRoleGate(item) : item))
@@ -31,9 +51,6 @@ const DropdownCustomize = (props) => {
     items: checkRoleGateItem,
     onClick: handleMenuClick,
   };
-
-  console.log(currentUser);
-
 
   return currentUser ? (
     <Dropdown menu={menuProps} placement="bottomRight" trigger={"click"} className={`h-fit ${currentLocation === "/" ? "text-white hover:text-[#DCB485]" : "hover:text-white text-[#4C2113]"} hover:bg-[#7c7c7c36] px-2 py-2 rounded-md`}>
@@ -55,7 +72,7 @@ const DropdownCustomize = (props) => {
       })}
     >
       <Lock size={21} />
-      <span className="lg:inline hidden">Sign in</span>
+      <span className="lg:inline hidden">Đăng nhập</span>
     </NavLink>
   );
 };

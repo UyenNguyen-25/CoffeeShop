@@ -5,26 +5,26 @@ const ProductList = ({ product }) => {
     style: "currency",
     currency: "VND",
   });
-  console.log("product list", product);
+  // console.log("product list", product);
   return (
-    <div className="grid grid-cols-4 gap-4 mt-4">
-      {product?.map((item, index) => (
-        <div key={index} className="bg-white shadow-2xl rounded-xl">
+    <div className="grid grid-cols-5 gap-4 mt-4 mb-7">
+      {Array.isArray(product) && product.map((item, index) => (
+        <div key={index} className="bg-white shadow-2xl rounded-xl h-[350px]">
           <img
-            className="w-2/3 m-auto my-8"
-            src={item.product_img}
-            alt={item.product_name}
+            className="rounded-t-xl "
+            src={item.img[0]}
+            alt={item.name}
           />
-          <div className="px-6">
+          <div className="px-6 mt-3">
             <Link
-              to={`/products/${item._id}`}
-              className="font-semibold text-base"
+              to={`/product/${item._id}`}
+              className="text-base whitespace-nowrap overflow-ellipsis w-[200px] inline-block overflow-hidden"
             >
-              {item.product_name}
+              {item.name}
             </Link>
             <div className="flex gap-3">
-              <p className="font-bold my-4 text-base">
-                {formatter.format(item.product_price)}
+              <p className="font-bold my-1 text-base">
+                {formatter.format(item.price)}
               </p>
               {
                 item.product_price_discount > 0 && (

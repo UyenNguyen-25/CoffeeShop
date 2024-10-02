@@ -16,7 +16,13 @@ export const productsApiSlice = apiSlice.injectEndpoints({
       }),
       invalidatesTags: [{ type: "Product", id: "LIST" }],
     }),
+    getSoldProducts: builder.query({
+      query: (arg) => ({
+        url: `${PRODUCTS_URL}/get-sold-product`,
+      }),
+    }),
   }),
 });
 
-export const { useGetProductsQuery } = productsApiSlice;
+export const { useGetProductsQuery, useGetSoldProductsQuery } =
+  productsApiSlice;

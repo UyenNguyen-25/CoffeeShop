@@ -16,11 +16,11 @@ const CreateAccount = ({ refetch }) => {
     try {
       const validFields = await form.validateFields();
       const newUser = {
-        user_fullname: validFields?.user_fullname,
-        user_phoneNumber: validFields?.user_phoneNumber,
-        user_password: validFields?.user_password ? validFields?.user_password : "123456",
-        user_email: validFields?.user_email,
-        user_role: validFields?.user_role,
+        fullName: validFields?.fullName,
+        phoneNumber: validFields?.phoneNumber,
+        password: validFields?.password ? validFields?.password : "123456",
+        email: validFields?.email,
+        role: validFields?.role,
       };
       console.log(newUser);
 
@@ -61,8 +61,8 @@ const CreateAccount = ({ refetch }) => {
       <Modal title="Create Account" open={isOpen} onCancel={handleCancel} onOk={onFinish}>
         <Form form={form} layout="vertical">
           <Form.Item
-            name="user_fullname"
-            label="Full Name"
+            name="fullName"
+            label="Họ và tên"
             hasFeedback
             validateDebounce={1000}
             rules={[{ required: true, message: "Please enter full name" }]}
@@ -70,8 +70,8 @@ const CreateAccount = ({ refetch }) => {
             <Input placeholder="Please enter full name" />
           </Form.Item>
           <Form.Item
-            name="user_phoneNumber"
-            label="Phone Number"
+            name="phoneNumber"
+            label="Số điện thoại"
             hasFeedback
             validateDebounce={1000}
             rules={[
@@ -107,14 +107,14 @@ const CreateAccount = ({ refetch }) => {
             />
           </Form.Item>
 
-          <Form.Item name="user_email" label="Email">
+          <Form.Item name="email" label="Email">
             <Input placeholder="Please input email" />
           </Form.Item>
-          <Form.Item name="user_password" label="Password">
+          <Form.Item name="password" label="Password">
             <Input.Password defaultValue="123456" />
           </Form.Item>
           <Form.Item
-            name="user_role"
+            name="role"
             label="Role"
             rules={[{ required: true, message: "Please select role" }]}
           >

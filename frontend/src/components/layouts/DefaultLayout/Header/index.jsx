@@ -1,21 +1,22 @@
 import {
-  ArrowRightLeft,
-  LogOut,
+  ChevronDown,
   ShoppingCart,
-  User,
+  // User,
 } from "lucide-react";
-import { Link, NavLink, useLocation } from "react-router-dom";
-import { Badge } from "antd";
+import { Link, NavLink, useLocation, useNavigate } from "react-router-dom";
+import { Badge, Dropdown, Flex } from "antd";
 import { useEffect, useState } from "react";
 import DropdownCustomize from "../../../common/components/dropdown";
 import { useSelector } from "react-redux";
 import { selectCurrentUser } from "@/redux/features/auth/authSlice";
+import { CoffeeOutlined, SyncOutlined } from "@ant-design/icons";
 
 function Header() {
   const [scrollPosition, setScrollPosition] = useState(0);
   const currentUser = useSelector(selectCurrentUser);
   const cart = useSelector((state) => state.cart);
   const currentLocation = useLocation()
+  const navigate = useNavigate();
 
   useEffect(() => {
     const handleScroll = () => {
@@ -33,28 +34,35 @@ function Header() {
 
   const itemsProps = [
     {
-      label: "Hồ sơ",
-      key: "/profile",
-      icon: <User />,
-      permission: ["staff"]
+      label: "Các Sản Phẩm",
+      key: "/products",
+      icon: <CoffeeOutlined style={{ fontSize: '18px' }} />,
     },
     {
-      label: "Dashboard",
-      key: "dashboard",
-      icon: <ArrowRightLeft />,
-      permission: ["admin", "staff"],
-    },
-    {
-      label: "Đăng xuất",
-      key: "/login",
-      icon: <LogOut />,
+      label: "Trộn Cà Phê",
+      key: "/mix-coffee",
+      icon: <SyncOutlined style={{ fontSize: '18px' }} />,
     },
   ];
-  console.log(currentUser);
+
+  const checkRoleGateItem = itemsProps
+    .map((item) => item)
+
+  const handleMenuClick = async (e) => {
+    if (e.key === "/products") {
+      navigate("/products");
+    } else navigate(e.key);
+  };
+
+
+  const menuProps = {
+    items: checkRoleGateItem,
+    onClick: handleMenuClick,
+  };
 
   const routes = [
-    { title: "Home", path: "/" },
-    { title: "Product", path: "/products" },
+    { title: "Trang chủ", path: "/" },
+    { title: "Sản Phẩm", path: "/products" },
     { title: "Blog", path: "/blog" },
   ];
 
@@ -66,25 +74,33 @@ function Header() {
         }`}
     >
       {/* NavBar */}
-      <div className="flex items-center justify-between p-3 px-6 lg:pl-24 lg:pr-10">
-        <Link to="/" className={`font-bold text-3xl ${currentLocation.pathname === "/" ? "text-[#ffffff]" : "text-[#4C2113]"}`}>
-          Coffee Shop
+      <div className="flex items-center justify-between p-1 px-6 lg:pl-24 lg:pr-10">
+        <Link to="/" className={` ${currentLocation.pathname === "/" ? "text-[#ffffff]" : "text-[#4C2113]"} font-header-logo text-5xl w-fit py-2 font-semibold`}>
+          Hoa Đất
         </Link>
 
         <div className="flex space-x-5 lg:space-x-16">
-          {routes.map((route) => (
-            <NavLink
-              key={route.path}
-              to={route.path}
-              style={({ isActive }) => ({
-                fontWeight: isActive ? "bold" : "normal",
-                color: currentLocation.pathname === "/" ? isActive ? "#DCB485" : "#ffffff" : "#4C2113",
-              })}
-              className="text-xl lg:text-[22px]"
-            >
-              {route.title}
-            </NavLink>
-          ))}
+          {routes.map((route) => {
+            return route.path !== "/products" ? (
+              <NavLink
+                key={route.path}
+                to={route.path}
+                style={({ isActive }) => ({
+                  fontWeight: isActive ? "bold" : "normal",
+                  color: currentLocation.pathname === "/" ? isActive ? "#DCB485" : "#ffffff" : "#4C2113",
+                })}
+                className="text-xl lg:text-[22px] hover:bg-[#7c7c7c36] px-5 flex items-center rounded-md"
+              >
+                {route.title}
+              </NavLink>
+            ) : <Dropdown menu={menuProps} placement="bottomRight" trigger={"hover"} className={`h-fit text-xl lg:text-[22px] 
+            ${currentLocation.pathname === "/" ? "text-white" : currentLocation.pathname === "/products" || currentLocation.pathname === "/mix-coffee" ? "text-[#4C2113] font-bold" : "text-[#4C2113] font-normal"} hover:bg-[#7c7c7c36] px-5 py-2 rounded-md`}>
+              <Flex gap={6} align="center">
+                {route.title}
+                <ChevronDown size={18} />
+              </Flex>
+            </Dropdown>
+          })}
         </div>
 
         <div className="flex items-center gap-2 text-sm lg:text-[17px]">
@@ -93,7 +109,7 @@ function Header() {
             <Badge count={countCart}>
               <NavLink
                 to="/cart"
-                className="flex items-center gap-2 relative  px-4 py-3 rounded-xl lg:text-[17px]"
+                className="flex items-center gap-2 relative  px-4 py-3 rounded-xl lg:text-[17px] hover:bg-[#7c7c7c36]"
                 style={({ isActive }) => ({
                   // fontWeight: isActive ? "bold" : "normal",
                   color: currentLocation.pathname === "/" ? isActive ? "#DCB485" : "#ffffff" : "#4C2113",
@@ -101,7 +117,7 @@ function Header() {
                 })}
               >
                 <ShoppingCart size={21} />
-                <span className="lg:inline hidden">Cart</span>
+                <span className="lg:inline hidden">Giỏ hàng</span>
               </NavLink>
             </Badge>
           )}
@@ -115,7 +131,7 @@ function Header() {
           />
         </div>
       </div>
-    </div>
+    </div >
   );
 }
 

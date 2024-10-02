@@ -10,7 +10,7 @@ const usePagination = (items) => {
   const start = (Number(page) - 1) * Number(perPage);
   const end = start + Number(perPage);
 
-  const paginatedItems = useMemo(() => items.slice(start, end), [items, start, end]);
+  const paginatedItems = useMemo(() => Array.isArray(items) && items?.slice(start, end), [items, start, end]);
 
   return {
     paginatedItems,

@@ -15,9 +15,7 @@ const ProtectedRoute = ({ children }) => {
       const verifyRefreshToken = async () => {
         console.log("verifying refresh token");
         try {
-          //const response =
           await refresh();
-          //const { accessToken } = response.data
         } catch (err) {
           console.error(err);
         }

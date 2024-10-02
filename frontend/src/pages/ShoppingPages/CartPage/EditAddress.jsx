@@ -98,43 +98,54 @@ const EditAddress = ({ setShippingAddress, shippingAddress }) => {
     }, [district]);
     console.log(shippingAddress)
     const address_line1 = shippingAddress?.address_line1?.split(", ") || [];
-    console.log('address_line1', shippingAddress?.address_line1?.split(", "))
+
+    const calculateShippingFee = (province) => {
+        if (province == 79) {
+            return 0;
+        } else {
+            return 30000;
+        }
+    }
 
     const onFinish = async (data) => {
         const formData = {
             name: data.name,
             phone: data.phone,
+            email: data.email,
             isDefault: data.isDefault,
-            fullAddress: `${data.address}, ${findTownNameById(data.town)}, ${findDistrictNameById(data.district)}, ${findProvinceNameById(data.province)}`
+            fullAddress: `${data.address}, ${findTownNameById(data.town)}, ${findDistrictNameById(data.district)}, ${findProvinceNameById(data.province)}`,
+            shippingFee: calculateShippingFee(data.province)
         };
-        // localStorage.setItem('shippingAddress', JSON.stringify(formData));
+        localStorage.setItem('shippingAddress', JSON.stringify(formData));
         console.log('Form data address:', formData);
-        // setIsModalVisible(false);
+        setShippingAddress(formData);
+        setIsModalVisible(false);
 
 
-        try {
-            const response = await axios.put(`${BASE_URL}/api/user/confirm-user-address`, {
-                user_id: userDetail?.user_id,
-                address: formData?.fullAddress,
-                fullname: formData?.name,
-                phoneNumber: formData?.phone,
-                isDefault: formData?.isDefault,
-            }, {
-                headers: {
-                    Authorization: `Bearer ${token}`
-                }
-            });
+        // try {
+        //     const response = await axios.put(`${BASE_URL}/api/user/confirm-user-address`, {
+        //         user_id: userDetail?.user_id,
+        //         address: formData?.fullAddress,
+        //         fullname: formData?.name,
+        //         phoneNumber: formData?.phone,
+        //         isDefault: formData?.isDefault,
+        //     }, {
+        //         headers: {
+        //             Authorization: `Bearer ${token}`
+        //         }
+        //     });
 
-            console.log('API response:', response.data);
-            // setShippingAddress(...response.data.updatedUser.address_id, updatedAddress: isDefault ? 'address_line1' : 'address_line2')
-            setShippingAddress({
-                ...response.data.updatedUser.address_id,
-                updatedAddress: isDefault, // Thêm thuộc tính updatedAddress
-            });
-            setIsModalVisible(false);
-        } catch (error) {
-            console.error('Error confirming user address:', error);
-        }
+        //     console.log('API response:', response.data);
+        //     // setShippingAddress(...response.data.updatedUser.address_id, updatedAddress: isDefault ? 'address_line1' : 'address_line2')
+        //     setShippingAddress({
+        //         ...response.data.updatedUser.address_id,
+        //         updatedAddress: isDefault, 
+        //         shippingFee: formData.shippingFee
+        //     });
+        //     setIsModalVisible(false);
+        // } catch (error) {
+        //     console.error('Error confirming user address:', error);
+        // }
     };
 
     const handleProvinceChange = (value) => {
@@ -198,7 +209,7 @@ const EditAddress = ({ setShippingAddress, shippingAddress }) => {
 
     return (
         <>
-            <Button type="primary" onClick={showModal}>
+            <Button className='border border-[#4C2113] text-[#4C2113]' onClick={showModal}>
                 Thay đổi
             </Button>
             <Modal
@@ -237,6 +248,23 @@ const EditAddress = ({ setShippingAddress, shippingAddress }) => {
                     </Form.Item>
 
                     {errors.name && <p className='text-red-600'>{errors.name.message}</p>}
+
+                    <Form.Item
+                        label="Email"
+                        name="email"
+                        rules={[
+                            { required: true, message: 'Hãy nhập email!' },
+                            {
+                                pattern: /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/,
+                                message: "Hãy nhập email hợp lệ",
+                            },]}
+                    >
+                        <Controller
+                            control={control}
+                            name="email"
+                            render={({ field }) => <Input {...field} />}
+                        />
+                    </Form.Item>
 
                     <Form.Item
                         label="Số điện thoại"

@@ -128,6 +128,23 @@ const userController = {
       .status(200)
       .json({ message: `${deletedUser?.phoneNumber} deleted success` });
   },
+  checkPhoneExisted: async (req, res) => {},
+  changePassword: async (req, res) => {},
+  searchUsers: async (req, res) => {
+    const search = req.query.search || "";
+
+    const query = {
+      phoneNumber: { $regex: search, $options: "i" },
+      email: { $regex: search, $options: "i" },
+    };
+
+    const users = await User.find(query);
+
+    if (!users?.length) {
+      return res.status(404).json({ message: "No users found" });
+    }
+    res.status(200).json(users);
+  },
 };
 
 module.exports = userController;
