@@ -75,49 +75,56 @@ const CustomTable = ({ list, Loading, refetch }) => {
             hidden: true
         },
         {
-            title: "No",
+            title: "STT",
             dataIndex: "key",
         },
         {
-            title: "Phone Number",
-            dataIndex: "user_id",
-            render: (value) => value?.user_phoneNumber
+            title: "Mã Đơn",
+            dataIndex: "orderCode",
         },
         {
-            title: "Payment Method",
+            title: "Số Điện Thoại",
+            dataIndex: "phoneNumber",
+        },
+        {
+            title: "Email",
+            dataIndex: "email",
+        },
+        {
+            title: "Phương Thức Thanh Toán",
             dataIndex: "payment_method",
             render: (value) => value?.toUpperCase(),
             filters: [
                 {
-                    text: "Momo",
-                    value: "momo",
+                    text: "",
+                    value: "",
                 },
                 {
                     text: "COD",
                     value: "COD",
                 },
             ],
-            onFilter: (value, record) => record.payment_method === value,
+            onFilter: (value, record) => record?.payment_method === value,
         },
         {
-            title: "Created Date",
+            title: "Ngày Tạo",
             dataIndex: "createdAt",
             render: (value) => format(new Date(value), "d/MM/yyy h:mm a"),
             sorter: (a, b) => new Date(a.createdAt) - new Date(b.createdAt)
         }, {
-            title: "Updated Date",
+            title: "Ngày Cập Nhật",
             dataIndex: "updatedAt",
             render: (value) => format(new Date(value), "d/MM/yyy h:mm a"),
             sorter: (a, b) => new Date(a.updatedAt) - new Date(b.updatedAt)
         },
         {
-            title: "Total Money",
-            dataIndex: "total_money",
+            title: "Tổng Tiền",
+            dataIndex: "totalPrice",
             render: (value) => formatter.format(value),
-            sorter: (a, b) => (a.total_money - b.total_money),
+            sorter: (a, b) => (a.totalPrice - b.totalPrice),
         },
         {
-            title: "Status",
+            title: "Trạng Thái",
             dataIndex: "order_status_id",
             render: (order_status) => {
                 const status = order_status?.order_status_description
@@ -129,7 +136,7 @@ const CustomTable = ({ list, Loading, refetch }) => {
             },
         },
         {
-            title: "Action",
+            title: "",
             key: "action",
             render: (text, record) => {
                 const status = record?.order_status_id?.order_status_description

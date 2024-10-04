@@ -13,15 +13,15 @@ const orderController = {
     }
   },
   generateUniqueOrderCode: async () => {
-    let orderCode = '';
+    let orderCode = "";
     let isUnique = false;
-  
+
     while (!isUnique) {
       orderCode = `${Date.now()}-${Math.floor(Math.random() * 10000)}`;
       const existingOrder = await Order.findOne({ orderCode });
-      isUnique = !existingOrder; 
+      isUnique = !existingOrder;
     }
-  
+
     return orderCode;
   },
   createOrder: async (req, res) => {
@@ -35,11 +35,11 @@ const orderController = {
         discountAmount,
         shippingAddress,
         payment_method,
-        orderItems 
+        orderItems,
       } = req.body;
 
       const orderCode = await orderController.generateUniqueOrderCode();
-      console.log('orderCode',orderCode)
+      console.log("orderCode", orderCode);
 
       const savedOrderItems = await Promise.all(
         orderItems.map(async (item) => {
@@ -47,16 +47,16 @@ const orderController = {
             productId: item.productId,
             quantity: item.quantity,
             typeId: item.typeId,
-            price: item.price
+            price: item.price,
           });
-          return await newOrderItem.save(); 
+          return await newOrderItem.save();
         })
       );
-      console.log('savedOrderItems', savedOrderItems)
+      console.log("savedOrderItems", savedOrderItems);
 
       const newOrder = new Order({
         orderCode,
-        orderItems: savedOrderItems.map(item => item._id), 
+        orderItems: savedOrderItems.map((item) => item._id),
         email,
         phoneNumber,
         fullName,
@@ -64,7 +64,7 @@ const orderController = {
         totalPrice,
         shippingAddress,
         payment_method,
-        discountAmount
+        discountAmount,
       });
 
       await newOrder.save();
@@ -81,7 +81,7 @@ const orderController = {
       console.log("Error: ", error);
       return res.status(500).json(error);
     }
-  }
+  },
 };
 
 module.exports = orderController;

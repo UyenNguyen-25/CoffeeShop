@@ -15,17 +15,14 @@ const OrderManagement = () => {
   const [filteredData, setFilteredData] = useState();
   const [selectedStatus, setSelectedStatus] = useState("All orders");
   const [query, setQuery] = useState({
-    user_phoneNumber: "",
+    phoneNumber: "",
     status: "",
     from: "",
     to: ""
   })
   const { data: orders, refetch, isLoading } = useGetOrdersQuery(query, {
-    pollingInterval: 2000,
-    skipPollingIfUnfocused: true,
     refetchOnMountOrArgChange: true,
-    // refetchOnReconnect: true,
-    // refetchOnFocus: true,
+    refetchOnFocus: true,
   })
 
   useEffect(() => {
@@ -62,7 +59,7 @@ const OrderManagement = () => {
           <Input placeholder="Search by phone" prefix={<SearchOutlined />}
             className="max-w-[340px]"
             onChange={(event) => {
-              setQuery(query => ({ ...query, user_phoneNumber: event.target.value }))
+              setQuery(query => ({ ...query, phoneNumber: event.target.value }))
             }}
           />
           <RangePicker

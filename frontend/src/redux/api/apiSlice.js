@@ -9,9 +9,8 @@ const baseQuery = fetchBaseQuery({
   mode: "cors",
   prepareHeaders: (headers, { getState }) => {
     const token = getState().auth.token;
-    if (token) {
-      headers.set("Authorization", `Bearer ${token}`);
-    }
+    headers.set("Authorization", `Bearer ${token}`);
+    if (!token) return;
     return headers;
   },
 });

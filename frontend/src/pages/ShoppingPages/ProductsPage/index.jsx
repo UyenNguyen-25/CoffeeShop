@@ -8,51 +8,13 @@ import bgImg from "./../../../assets/cf.jpg"
 import { useGetProductsQuery } from "@/redux/features/products/productsApiSlice";
 
 export default function ProductsPage() {
-  // const [product, setProduct] = useState([]);
   const [sort, setSort] = useState();
-  // const [filters, setFilters] = useState({
-  //   brand: [],
-  //   age: [],
-  // });
 
   const [displayedProducts, setDisplayedProducts] = useState([]);
   const { data: productsData, isLoading } = useGetProductsQuery()
 
-  const { paginatedItems, hasNextPage, hasPrevPage } =
+  const { paginatedItems } =
     usePagination(displayedProducts);
-
-  // useEffect(() => {
-  //   const fetchProducts = async () => {
-  //     try {
-  //       const response = await axios.get(
-  //         `${BASE_URL}api/product/get-all-product`
-  //       );
-  //       console.log("response", response.data);
-  //       if (!response) {
-  //         throw new Error("Network response was not ok");
-  //       }
-  //       const productsData = await response.data;
-  //       console.log("responseeeeee", productsData);
-  //       setProduct(productsData);
-  //     } catch (error) {
-  //       console.error("There was a problem with the fetch operation:", error);
-  //     }
-  //   };
-
-  //   fetchProducts();
-  // }, []);
-
-  // console.log("product index", productsData);
-
-  // const handleFilterChange = (filterType, value) => {
-  //   console.log("first");
-  //   setFilters((prevFilters) => ({
-  //     ...prevFilters,
-  //     [filterType]: prevFilters[filterType].includes(value)
-  //       ? prevFilters[filterType].filter((item) => item !== value)
-  //       : [...prevFilters[filterType], value],
-  //   }));
-  // };
 
   useEffect(() => {
     let filteredProducts = !isLoading && productsData && [...productsData];
@@ -79,25 +41,25 @@ export default function ProductsPage() {
   return (
     <div className="">
       <img src="https://file.hstatic.net/200000379831/collection/product_group_-_coffee_bean_54d6a0132f19462b86f1387318c35449.png" />
-      <div className="w-full flex flex-col gap-y-3 px-20 py-1">
-        <div className="bg-white h-16 rounded-lg py-4 mt-5">
-          <div className="flex gap-5 ml-4">
+      <div className="w-full flex flex-col gap-y-3 lg:px-20 py-1">
+        <div className="bg-white h-fit rounded-lg py-4 mt-5 max-md:w-screen overflow-x-auto">
+          <div className="flex gap-5 ml-4 max-md:overflow-x-auto max-md:flex-nowrap overflow-none">
             <button
-              className={`border border-[#D1D4D5] rounded-lg px-3 py-1 ${!sort ? "bg-[#4C2113] text-white" : ""
+              className={`border border-[#D1D4D5] rounded-lg px-3 py-1 text-base max-sm:text-sm max-md:text-xs min-w-fit ${!sort ? "bg-[#4C2113] text-white" : ""
                 }`}
               onClick={() => handleSort()}
             >
               Tất cả
             </button>
             <button
-              className={`border border-[#D1D4D5] rounded-lg px-3 py-1 ${sort === "lowToHigh" ? "bg-[#4C2113] text-white" : ""
+              className={`border border-[#D1D4D5] rounded-lg px-3 py-1 text-base max-sm:text-sm max-md:text-xs min-w-fit ${sort === "lowToHigh" ? "bg-[#4C2113] text-white" : ""
                 }`}
               onClick={() => handleSort("lowToHigh")}
             >
               Giá Thấp - Cao
             </button>
             <button
-              className={`border border-[#D1D4D5] rounded-lg px-3 py-1 ${sort === "highToLow" ? "bg-[#4C2113] text-white" : ""
+              className={`border border-[#D1D4D5] rounded-lg px-3 py-1 text-base max-sm:text-sm max-md:text-xs min-w-fit ${sort === "highToLow" ? "bg-[#4C2113] text-white" : ""
                 }`}
               onClick={() => handleSort("highToLow")}
             >
@@ -105,18 +67,20 @@ export default function ProductsPage() {
             </button>
           </div>
         </div>
-        {!isLoading ? (
-          <>
-            <ProductList product={paginatedItems} />
-            {/* <Pagination
+        <div className="mt-4 mb-7 px-2 sm:px-4 lg:px-0">
+          {!isLoading ? (
+            <>
+              <ProductList product={paginatedItems} />
+              {/* <Pagination
               hasNextPage={hasNextPage}
               hasPrevPage={hasPrevPage}
               product={displayedProducts.length}
             /> */}
-          </>
-        ) : (
-          <Skeleton />
-        )}
+            </>
+          ) : (
+            <Skeleton />
+          )}
+        </div>
       </div>
       <div
         className="w-[100%] h-[270px] flex items-center justify-center grayscale"

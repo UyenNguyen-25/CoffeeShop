@@ -26,7 +26,7 @@ import Prefetch from "./routes/Prefetch";
 import BrandManagement from "./pages/DashboardPages/BrandManagement";
 import ErrorBoundary from "./components/common/Error";
 import BlogPage from "./pages/ShoppingPages/BlogPage";
-import MixCoffeePage from "./pages/ShoppingPages/MixCoffeePage";
+import CoffeeMixer from "./pages/ShoppingPages/MixCoffeePage";
 
 const router = createBrowserRouter([
   {
@@ -47,7 +47,6 @@ const router = createBrowserRouter([
           {
             path: "products",
             element: <ProductsPage />,
-            children: [],
           },
           {
             path: "product/:id",
@@ -57,7 +56,6 @@ const router = createBrowserRouter([
             path: "purchase",
             element: <OrderPage />,
           },
-          // { path: "purchase/order-detail", element: <OrderDetail /> },
           { path: "order/order-detail/:orderId", element: <OrderDetailUser /> },
           {
             path: "purchase/request-return",
@@ -70,7 +68,6 @@ const router = createBrowserRouter([
           {
             path: "cart",
             element: <CartPage />,
-            children: [{ path: "", element: "" }],
           },
           {
             path: "blog",
@@ -78,7 +75,7 @@ const router = createBrowserRouter([
           },
           {
             path: "mix-coffee",
-            element: <MixCoffeePage />,
+            element: <CoffeeMixer />,
           },
           {
             path: "order-confirmation",
@@ -121,29 +118,24 @@ const router = createBrowserRouter([
           {
             path: "",
             element: <Dashboard />,
-            children: [],
           },
           {
             path: "products-management",
             element: <ProductManagement />,
-            children: [],
           },
           {
             path: "orders-management",
             element: <OrderManagement />,
-            children: [],
           },
           {
             path: "brands-management",
             element: <BrandManagement />,
-            children: [],
           },
           {
             path: "users-management",
             shouldRevalidate: ({ currentUrl, nextUrl }) =>
               currentUrl.pathname !== nextUrl.pathname,
             element: <UserManagement />,
-            children: [],
           },
         ],
       },

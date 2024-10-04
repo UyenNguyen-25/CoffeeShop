@@ -3,7 +3,7 @@ import { useLocation } from 'react-router-dom';
 
 const usePagination = (items) => {
   const location = useLocation();
-  const searchParams = new URLSearchParams(location.search);
+  const searchParams = new URLSearchParams(location?.search);
   const page = searchParams.get('page') || '1';
   const perPage = searchParams.get('per_page') || 8;
 
@@ -14,7 +14,7 @@ const usePagination = (items) => {
 
   return {
     paginatedItems,
-    hasNextPage: end < items.length,
+    hasNextPage: end < items?.length,
     hasPrevPage: start > 0,
     currentPage: Number(page),
     perPage: Number(perPage)
