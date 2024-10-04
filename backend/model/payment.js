@@ -9,10 +9,15 @@ const PaymentSchema = new mongoose.Schema(
     orderId: {
       type: mongoose.Types.ObjectId,
       require: true,
+      ref: "order"
     },
     paymentStatus: {
       type: String,
       default: "unpaid",
+    },
+    orderCode: {
+      type: Number,
+      required: true, 
     },
   },
   { timestamps: true }

@@ -53,6 +53,18 @@ const CoffeeMixer = () => {
         setSelectedCoffees([]);
     };
 
+    const handleSelectSuggestions = (suggestion) => {
+        resetRatios();
+        console.log(suggestion.ratio);
+        const filteredRatiosKey = Object.keys(suggestion.ratio)
+            .filter(key => suggestion.ratio[key] !== 0);
+
+        console.log(filteredRatiosKey);
+
+        setSelectedCoffees(filteredRatiosKey)
+        setRatios(suggestion.ratio)
+    }
+
     const sortCoffeeRatios = (coffeeRatios) => {
         const capitalize = (str) => str.charAt(0).toUpperCase() + str.slice(1);
 
@@ -68,11 +80,13 @@ const CoffeeMixer = () => {
     return (
         <div className="container my-10">
             <Title level={2} style={{ textAlign: 'center' }}>Bạn có thể sẽ thích</Title>
-            <Row gutter={[16, 16]} justify="center">
+            <Row gutter={[16, 16]} justify="center" style={{ display: 'flex', flexWrap: 'wrap' }}>
                 {coffeeSuggestions.map((suggestion, index) => {
                     return (
-                        <Col xs={24} sm={12} lg={8} key={index}>
-                            <Card title={suggestion.name}>
+                        <Col xs={24} sm={12} lg={8} key={index} style={{ display: 'flex' }}>
+                            <Card title={suggestion.name}
+                                onClick={() => handleSelectSuggestions(suggestion)}
+                                style={{ flex: 1, display: 'flex', flexDirection: 'column', justifyContent: 'space-between' }}>
                                 <p>{suggestion.description}</p>
                                 <p className='font-semibold mt-3'>Tỷ lệ: </p>
                                 {sortCoffeeRatios(suggestion.ratio)}
@@ -149,13 +163,13 @@ const CoffeeMixer = () => {
             </Row>
 
             {/* Mô tả kết quả */}
-            <Row justify="center" style={{ marginTop: '20px' }}>
+            <Row justify="center" gutter={[16, 16]} style={{ marginTop: '20px' }}>
                 <Col xs={24} sm={12} lg={8}>
                     <Card>
                         <Paragraph>{
                             description.length > 0 ? (
                                 <><List
-                                    header={<div>Công thức của bạn gồm có:</div>}
+                                    header={<div><strong>Công thức của bạn gồm có:</strong></div>}
                                     bordered={false}
                                     dataSource={description}
                                     renderItem={(item) => (
@@ -169,18 +183,51 @@ const CoffeeMixer = () => {
                             ) : 'Hãy điều chỉnh tỉ lệ để xem mô tả phù hợp.'}</Paragraph>
                     </Card>
                 </Col>
+                <Col xs={24} sm={12} lg={8}>
+                    <Card>
+                        <Paragraph>
+                            <List
+                                header={<div><strong>Thành Tiền</strong></div>}
+                                bordered={false}
+                                dataSource={[
+                                    {
+                                        title: "Tiền Hạt",
+                                        amount: "50,000 VND", // Số tiền hạt
+                                    },
+                                    {
+                                        title: "Tiền Xay",
+                                        amount: "10,000 VND", // Số tiền xay
+                                    },
+                                    {
+                                        title: "Tổng Cộng",
+                                        amount: "60,000 VND", // Tổng cộng tiền
+                                    },
+                                ]}
+                                renderItem={(item) => (
+                                    <List.Item>
+                                        <div style={{ display: 'flex', justifyContent: 'space-between', width: '100%' }}>
+                                            <span>{item.title}</span>
+                                            <span>{item.amount}</span>
+                                        </div>
+                                    </List.Item>
+                                )}
+                            />
+                            {total !== 100 && "Còn thiếu: " + (100 - total) + "%"}
+                        </Paragraph>
+                    </Card>
+                </Col>
             </Row>
 
             {/* Button Confirm và Reset */}
             <Row justify="center" gutter={[16, 16]} style={{ marginTop: '20px' }}>
                 <Col>
                     <Button type="primary" onClick={handleConfirm}>
-                        Confirm
+                        Thanh Toán
                     </Button>
                 </Col>
                 <Col>
                     <Button onClick={handleReset}>
-                        Reset
+                        Làm Mới
                     </Button>
                 </Col>
             </Row>

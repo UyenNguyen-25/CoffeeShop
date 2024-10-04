@@ -13,7 +13,7 @@ const OrderItemSchema = new mongoose.Schema(
     },
     typeId: {
       type: mongoose.Types.ObjectId,
-      ref: "Type",
+      ref: "type",
     },
     price: {
       type: Number,

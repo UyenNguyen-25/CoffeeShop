@@ -13,16 +13,13 @@ const OrderConfirmationPage = () => {
                 <Result
                     status="success"
                     title="Đặt hàng thành công!"
-                    subTitle="Cảm ơn bạn đã đặt hàng. Đơn hàng của bạn đã được xác nhận."
+                    subTitle="Cảm ơn bạn đã đặt hàng. Đơn hàng của bạn đã được xác nhận qua Email. Check ngay nhé!"
                     extra={[
                         <Button type="primary" key="go-home" className="mr-4">
                             <Link to="/" className="text-white">
                                 Quay lại trang chủ
                             </Link>
-                        </Button>,
-                        <Button key="view-order">
-                            <Link to={`/order/order-detail/${orderId}`}>Xem chi tiết đơn hàng</Link>
-                        </Button>,
+                        </Button>
                     ]}
                 />
             </div>

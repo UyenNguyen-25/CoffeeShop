@@ -1,6 +1,7 @@
 const Order = require("../model/Order");
 const OrderItem = require("../model/OrderItem");
 const Payment = require("../model/payment");
+const sendMail = require("../util/sendMail");
 
 const orderController = {
   getAllorders: async (req, res) => {
@@ -13,17 +14,15 @@ const orderController = {
     }
   },
   generateUniqueOrderCode: async () => {
-    let orderCode = "";
-    let isUnique = false;
+    const lastOrder = await Order.findOne().sort({ orderCode: -1 }).exec();
 
-    while (!isUnique) {
-      orderCode = `${Date.now()}-${Math.floor(Math.random() * 10000)}`;
-      const existingOrder = await Order.findOne({ orderCode });
-      isUnique = !existingOrder;
+    if (lastOrder) {
+      return lastOrder.orderCode >= 18 ? lastOrder.orderCode + 1 : 18;
+    } else {
+      return 18;
     }
-
-    return orderCode;
   },
+
   createOrder: async (req, res) => {
     try {
       const {
@@ -65,16 +64,20 @@ const orderController = {
         shippingAddress,
         payment_method,
         discountAmount,
+        status: "pending",
       });
 
       await newOrder.save();
 
       const newPayment = new Payment({
-        order_id: newOrder._id,
-        payment_method,
-        payment_status: "Unpaid",
+        orderId: newOrder._id,
+        orderCode: newOrder.orderCode,
+        paymentMethod: payment_method,
+        paymentStatus: "Unpaid",
       });
       await newPayment.save();
+
+      sendMail(email, newOrder);
 
       return res.status(201).json(newOrder);
     } catch (error) {
