@@ -10,7 +10,7 @@ import { useEffect, useState } from "react";
 import DropdownCustomize from "../../../common/components/dropdown";
 import { useSelector } from "react-redux";
 import { selectCurrentUser } from "@/redux/features/auth/authSlice";
-import logo from "../../../../assets/logo-removebg.png" 
+import logo from "../../../../assets/logo_withStroke.png" 
 
 function Header() {
   const [scrollPosition, setScrollPosition] = useState(0);
