@@ -123,15 +123,15 @@ const ResponsiveHeader = () => {
   };
 
   return (
-    <Header className={`top-0 left-0 w-full z-50 transition-colors duration-200 max-md:px-3 px-8 h-fit ${window.innerWidth <= 768 ? currentLocation.pathname === "/"
+    <Header className={`top-0 left-0 w-full z-50 transition-colors duration-200 max-md:px-3 px-8 h-fit ${currentLocation.pathname === "/"
       ? "fixed" && scrollPosition > 50
         ? "bg-black shadow-xl"
-        : "bg-transparent"
-      : "bg-[#F1DEBC] relative" : "sticky bg-black shadow-xl"
-      }`}>
+        : window.innerWidth > 600 && "bg-transparent"
+      : "bg-[#F1DEBC] relative"
+      } ${window.innerWidth > 600 ? "fixed" : "sticky bg-black shadow-xl"}`}>
 
       {/* Desktop-menu */}
-      <div className="flex items-center justify-between h-full w-full">
+      < div className="flex items-center justify-between h-full w-full" >
         <HoaDatLogo width={"10%"} height={"20%"} onClick={() => navigate("/")} />
         <div className="flex space-x-5 lg:space-x-10 max-lg:hidden">
           {routes.map((route) => {
@@ -210,9 +210,9 @@ const ResponsiveHeader = () => {
             </Drawer>
           </div>
         </div>
-      </div>
+      </ div>
 
-    </Header>
+    </Header >
   );
 };
 
