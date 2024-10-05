@@ -27,6 +27,7 @@ import BrandManagement from "./pages/DashboardPages/BrandManagement";
 import ErrorBoundary from "./components/common/Error";
 import BlogPage from "./pages/ShoppingPages/BlogPage";
 import CoffeeMixer from "./pages/ShoppingPages/MixCoffeePage";
+import CheckLoginRoute from "./routes/CheckLoginRoute";
 
 const router = createBrowserRouter([
   {
@@ -108,9 +109,11 @@ const router = createBrowserRouter([
       {
         element: (
           <ProtectedRoute>
-            <Prefetch>
-              <DashboardLayout />
-            </Prefetch>
+            <CheckLoginRoute>
+              <Prefetch>
+                <DashboardLayout />
+              </Prefetch>
+            </CheckLoginRoute>
           </ProtectedRoute>
         ),
         path: "dashboard",

@@ -9,10 +9,8 @@ import { useGetProductsQuery } from "@/redux/features/products/productsApiSlice"
 
 export default function ProductsPage() {
   const [sort, setSort] = useState();
-
   const [displayedProducts, setDisplayedProducts] = useState([]);
   const { data: productsData, isLoading } = useGetProductsQuery()
-
   const { paginatedItems } =
     usePagination(displayedProducts);
 

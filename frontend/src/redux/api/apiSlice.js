@@ -8,14 +8,18 @@ const baseQuery = fetchBaseQuery({
   credentials: "include",
   mode: "cors",
   prepareHeaders: (headers, { getState }) => {
-    const token = getState().auth.token;
-    headers.set("Authorization", `Bearer ${token}`);
-    if (!token) return;
-    return headers;
+    const token = localStorage.getItem("jwt");
+    if (token) {
+      headers.set("Authorization", `Bearer ${token}`);
+      return headers;
+    }
+    return;
   },
 });
 
 const baseQueryWithReauth = async (args, api, extraOptions) => {
+  // try {
+
   let result = await baseQuery(args, api, extraOptions);
 
   // If you want, handle other status codes, too
@@ -38,7 +42,13 @@ const baseQueryWithReauth = async (args, api, extraOptions) => {
     }
   }
 
+  if (result?.error?.status === 401) {
+    console.log("Unauthorized");
+  }
   return result;
+  // } catch (error) {
+  //   throw new Error(error);
+  // }
 };
 
 export const apiSlice = createApi({

@@ -1,12 +1,9 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import { useSendLogoutMutation } from "@/redux/features/auth/authApiSlice";
-import { selectCurrentToken } from "@/redux/features/auth/authSlice";
-import { useEffect, useRef } from "react";
-import { useSelector } from "react-redux";
+import { useEffect } from "react";
 
 const ResetToken = ({ children }) => {
-    const token = useSelector(selectCurrentToken);
-    const effectRan = useRef(false);
+    const token = localStorage.getItem("jwt");
     const [signout] = useSendLogoutMutation()
 
     useEffect(() => {
@@ -21,7 +18,6 @@ const ResetToken = ({ children }) => {
 
         if (token) deleteToken()
 
-        return () => (effectRan.current = true);
     }, []);
 
     return children;

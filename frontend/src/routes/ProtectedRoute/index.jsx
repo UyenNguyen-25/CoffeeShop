@@ -1,10 +1,8 @@
 import { useRefreshMutation } from "@/redux/features/auth/authApiSlice";
-import { selectCurrentToken } from "@/redux/features/auth/authSlice";
 import { useEffect, useRef } from "react";
-import { useSelector } from "react-redux";
 
 const ProtectedRoute = ({ children }) => {
-  const token = useSelector(selectCurrentToken);
+  const token = localStorage.getItem("jwt")
   const effectRan = useRef(false);
   const [refresh] = useRefreshMutation();
 
@@ -17,11 +15,12 @@ const ProtectedRoute = ({ children }) => {
         try {
           await refresh();
         } catch (err) {
-          console.error(err);
+          console.log(err);
+
         }
       };
 
-      if (!token) verifyRefreshToken();
+      if (token) verifyRefreshToken();
     }
     return () => (effectRan.current = true);
 
