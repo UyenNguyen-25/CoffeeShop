@@ -1,5 +1,6 @@
 import { momoLogo } from "@/assets/logo";
 import logo from "../../../../assets/logo-removebg.png"
+import { Navigate } from "react-router-dom";
 
 
 function Footer() {
@@ -49,7 +50,7 @@ function Footer() {
           </p>
         </div>
         {/* <!-- Useful links section --> */}
-        <div>
+        <div className="max-md:mx-auto">
           <h6 className="mb-4 flex justify-center font-semibold uppercase md:justify-start">
             Chấp nhận thanh toán
           </h6>
@@ -106,7 +107,15 @@ function Footer() {
             </svg>
             + 01 234 567 89
           </p>
+          <button
+            className="bg-[#9898984a] text-[#b28a62] font-semibold text-base p-2 px-7 rounded-lg"
+            onClick={() => <Navigate to={"/dashboard"} />}
+          >
+            Chuyển đến trang quản lý <br />
+            (dành cho nhân viên)
+          </button>
         </div>
+
       </div>
     </div>
 

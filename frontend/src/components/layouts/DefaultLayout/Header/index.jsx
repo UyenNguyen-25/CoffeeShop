@@ -41,11 +41,11 @@ const ResponsiveHeader = () => {
       key: "/",
     },
     {
-      label: "Các Sản Phẩm",
+      label: "Sản Phẩm",
       key: "submenuProduct",
       children:
         [{
-          label: "Các Sản Phẩm",
+          label: "Toàn bộ Sản Phẩm",
           key: "/products",
           icon: <CoffeeOutlined style={{ fontSize: '18px' }} />,
         },

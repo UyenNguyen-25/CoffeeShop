@@ -61,13 +61,6 @@ export default function HomePage() {
             >
               CÀ PHÊ NGAY
             </button>
-            <button
-              className="text-xs md:text-lg lg:text-xl tracking-wider border border-transparent bg-[#77483ab5] hover:bg-[#d6af12ac] rounded-3xl text-white px-5 sm:px-7 pt-2 pb-3 mt-3 md:mt-5 lg:mt-8 transition duration-300 transform hover:scale-105 shadow-lg"
-              onClick={() => nav("/dashboard")}
-            >
-              Chuyển đến trang quản lý <br />
-              (dành cho nhân viên)
-            </button>
           </div>
         </div>
         {/* Add more SwiperSlides as needed */}
