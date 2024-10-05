@@ -23,5 +23,4 @@ router.use("/api/product", productRouter);
 router.use("/api/promotion", promotionCodeRouter);
 router.use("/api/type", typeRouter);
 
-
 module.exports = router;

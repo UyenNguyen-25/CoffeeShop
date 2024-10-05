@@ -8,25 +8,16 @@ function DashboardLayout() {
   return (
     <Layout
       style={{
-        minHeight: "100vh",
+        height: "100vh",
+        width: "100vw"
       }}
     >
       {/* Sidebar */}
       <Sidebar />
       {/* Main Content */}
       <Layout>
-        {/* Header */}
         <Navbar />
-        {/* Breadcrumbs */}
         <Content className="px-6">
-          {/* <Breadcrumb
-            style={{
-              margin: "16px 0",
-            }}
-          >
-            {crumbs}
-          </Breadcrumb> */}
-          {/* Dynamic Route Content */}
           <Outlet />
         </Content>
       </Layout>

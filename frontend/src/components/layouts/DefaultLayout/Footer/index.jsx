@@ -1,4 +1,5 @@
-import { grabLogo, momoLogo } from "@/assets/logo";
+import { momoLogo } from "@/assets/logo";
+import logo from "../../../../assets/logo-removebg.png"
 
 
 function Footer() {
@@ -6,13 +7,14 @@ function Footer() {
     <div className="mx-6 py-10 text-center md:text-left">
       <div className="grid-1 grid gap-8 md:grid-cols-2 lg:grid-cols-4">
         {/* <!-- TW Elements section --> */}
-        <div className="">
+        <div>
           <h6 className="mb-4 flex items-center justify-center font-semibold uppercase md:justify-start">
+            <img src={logo} className="w-[50%]" alt="Logo" />
             <svg
               xmlns="http://www.w3.org/2000/svg"
               viewBox="0 0 24 24"
               fill="currentColor"
-              className="mr-3 h-4 w-4"
+              className="ml-2 h-5 w-5"
             >
               <path d="M12.378 1.602a.75.75 0 00-.756 0L3 6.632l9 5.25 9-5.25-8.622-5.03zM21.75 7.93l-9 5.25v9l8.628-5.032a.75.75 0 00.372-.648V7.93zM11.25 22.18v-9l-9-5.25v8.57a.75.75 0 00.372.648l8.628 5.033z" />
             </svg>
@@ -26,13 +28,13 @@ function Footer() {
           </p>
         </div>
         {/* <!-- Products section --> */}
-        <div className="">
+        <div>
           <h6 className="mb-4 flex justify-center font-semibold uppercase md:justify-start">
             Hỗ trợ khách hàng
           </h6>
           <p className="mb-4">
             <a className="text-neutral-600 dark:text-neutral-200">
-              Giới thiệu về Con Yêu
+              Giới thiệu về Hoa Đất
             </a>
           </p>
           <p className="mb-4">
@@ -47,7 +49,7 @@ function Footer() {
           </p>
         </div>
         {/* <!-- Useful links section --> */}
-        <div className="">
+        <div>
           <h6 className="mb-4 flex justify-center font-semibold uppercase md:justify-start">
             Chấp nhận thanh toán
           </h6>
@@ -56,6 +58,7 @@ function Footer() {
             <img
               className="text-neutral-600 dark:text-neutral-200 w-10"
               src={momoLogo}
+              alt="MoMo logo"
             />
           </p>
         </div>
@@ -86,7 +89,7 @@ function Footer() {
               <path d="M1.5 8.67v8.58a3 3 0 003 3h15a3 3 0 003-3V8.67l-8.928 5.493a3 3 0 01-3.144 0L1.5 8.67z" />
               <path d="M22.5 6.908V6.75a3 3 0 00-3-3h-15a3 3 0 00-3 3v.158l9.714 5.978a1.5 1.5 0 001.572 0L22.5 6.908z" />
             </svg>
-            conyeu@gmail.com
+            hoadat@gmail.com
           </p>
           <p className="mb-4 flex items-center justify-center md:justify-start">
             <svg
@@ -106,6 +109,7 @@ function Footer() {
         </div>
       </div>
     </div>
+
   );
 }
 

@@ -1,57 +1,74 @@
+import { Col, Row } from "antd";
 import { Link } from "react-router-dom";
 
-const ProductList = ({ product }) => {
+const ProductList = (props) => {
+  const { product } = props
   const formatter = new Intl.NumberFormat("vi", {
     style: "currency",
     currency: "VND",
   });
-  console.log("product list", product);
+
+  // console.log("product list", product);
   return (
-    <div className="grid grid-cols-4 gap-4 mt-4">
-      {product?.map((item, index) => (
-        <div key={index} className="bg-white shadow-2xl rounded-xl">
-          <img
-            className="w-2/3 m-auto my-8"
-            src={item.product_img}
-            alt={item.product_name}
-          />
-          <div className="px-6">
-            <Link
-              to={`/products/${item._id}`}
-              className="font-semibold text-base"
-            >
-              {item.product_name}
-            </Link>
-            <div className="flex gap-3">
-              <p className="font-bold my-4 text-base">
-                {formatter.format(item.product_price)}
-              </p>
-              {
-                item.product_price_discount > 0 && (
-                  <p className="my-4 line-through text-xs">
-                    {formatter.format(
-                      Math.floor(
-                        item.product_price / (1 - item.product_price_discount / 100)
-                      )
-                    )}
-                  </p>
-                )
-              }
+    // <div className="grid lg:grid-cols-5 md:grid-cols-3 sm:grid-cols-2 grid-cols-1 gap-4 w-full max-md:px-20 max-sm:px-5">
+    <Row gutter={[16, 16]} justify="start">
+      {Array.isArray(product) && product.map((item, index) => (
+        <Col key={index} xs={24} sm={12} md={8}>
+          <Link to={`/product/${item?._id}`}>
+            <div key={index} className="bg-white shadow-2xl rounded-xl pb-6 w-full h-auto mx-auto">
+              <img
+                className="rounded-t-xl object-cover w-full md:h-auto sm:h-64 h-48"
+                src={item.img[0]}
+                alt={item.name}
+                onMouseOver={e => {
+                  console.log('Hovering over image', item.img[1]);
+                  e.currentTarget.src = item.img[1] || item.img[0]
+                }}
+                onMouseOut={e => {
+                  console.log('Mouse out');
+                  e.currentTarget.src = item.img[0]
+                }}
 
-              <div className="flex flex-grow"></div>
-              {
-                item.product_price_discount > 0 && (
-                  <p className="font-bold my-4 text-[#E44918]">
-                    -{item.product_price_discount}%
+              />
+              <div className="px-6 mt-3 w-full">
+                <div
+                  className="text-base max-sm:text-sm max-md:text-xs w-full inline-block overflow-hidden"
+                >
+                  {item.name}
+                </div>
+                <div className="flex gap-3 items-center mt-2">
+                  <p className="font-bold text-base">
+                    {formatter.format(item.price)}
                   </p>
-                )
-              }
+                  {
+                    item.product_price_discount > 0 && (
+                      <p className="line-through text-xs text-gray-500">
+                        {formatter.format(
+                          Math.floor(
+                            item.product_price / (1 - item.product_price_discount / 100)
+                          )
+                        )}
+                      </p>
+                    )
+                  }
 
+                  <div className="flex-grow"></div>
+                  {
+                    item.product_price_discount > 0 && (
+                      <p className="font-bold text-[#E44918]">
+                        -{item.product_price_discount}%
+                      </p>
+                    )
+                  }
+
+                </div>
+              </div>
             </div>
-          </div>
-        </div>
+          </Link>
+        </Col>
       ))}
-    </div>
+      {/* </div> */}
+    </Row>
   );
 };
 
