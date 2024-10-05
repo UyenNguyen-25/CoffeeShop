@@ -123,9 +123,11 @@ const ResponsiveHeader = () => {
   };
 
   return (
-    <Header className={`fixed top-0 left-0 w-full z-50 transition-colors duration-200 max-md:px-3 px-8 h-fit ${currentLocation.pathname === "/" ?
-      scrollPosition > 50 ? 'bg-black shadow-xl' : 'bg-transparent' :
-      "bg-[#F1DEBC] relative"
+    <Header className={`top-0 left-0 w-full z-50 transition-colors duration-200 max-md:px-3 px-8 h-fit ${window.innerWidth <= 768 ? currentLocation.pathname === "/"
+      ? "fixed" && scrollPosition > 50
+        ? "bg-black shadow-xl"
+        : "bg-transparent"
+      : "bg-[#F1DEBC] relative" : "sticky bg-black shadow-xl"
       }`}>
 
       {/* Desktop-menu */}
