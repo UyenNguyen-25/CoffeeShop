@@ -1,2 +1,2 @@
-export const BASE_URL = 'https://coffeeshopbe.vercel.app/'
+export const BASE_URL = 'https://coffeeshop-be.onrender.com/'
 
