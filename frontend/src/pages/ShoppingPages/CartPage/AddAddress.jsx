@@ -96,33 +96,14 @@ const AddAddress = ({ setShippingAddress }) => {
     const onFinish = async (data) => {
         const formData = {
             name: data.name,
+            email: data.email,
             phone: data.phone,
-            remember: data.remember,
             fullAddress: `${data.address}, ${findTownNameById(data.town)}, ${findDistrictNameById(data.district)}, ${findProvinceNameById(data.province)}`
         };
         localStorage.setItem('shippingAddress', JSON.stringify(formData));
         console.log('Form data address:', formData);
         // setIsModalVisible(false);
         setShippingAddress(formData)
-
-        try {
-            const response = await axios.put(`${BASE_URL}/api/user/confirm-user-address`, {
-                user_id: userDetail.user_id,
-                address: formData.fullAddress,
-                fullname: formData.name,
-                phoneNumber: formData.phone,
-                default: formData.remember,
-            }, {
-                headers: {
-                    Authorization: `Bearer ${token}`
-                }
-            });
-
-            console.log('API response:', response.data);
-            setIsModalVisible(false);
-        } catch (error) {
-            console.error('Error confirming user address:', error);
-        }
     };
 
     const handleProvinceChange = (value) => {
@@ -203,6 +184,25 @@ const AddAddress = ({ setShippingAddress }) => {
                     </Form.Item>
 
                     {errors.name && <p className='text-red-600'>{errors.name.message}</p>}
+
+                    <Form.Item
+                        label="Email"
+                        name="email"
+                        rules={[
+                            { required: true, message: 'Hãy nhập email!' },
+                            {
+                                pattern: /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/,
+                                message: "Hãy nhập email hợp lệ",
+                            },]}
+                    >
+                        <Controller
+                            control={control}
+                            name="email"
+                            render={({ field }) => <Input {...field} />}
+                        />
+                    </Form.Item>
+
+                    {errors.email && <p className='text-red-600'>{errors.email.message}</p>}
 
                     <Form.Item
                         label="Số điện thoại"

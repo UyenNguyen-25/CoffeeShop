@@ -18,7 +18,6 @@ import UserManagement from "./pages/DashboardPages/UserManagement";
 import ProductsPage from "./pages/ShoppingPages/ProductsPage";
 import ProtectedRoute from "./routes/ProtectedRoute";
 import SetNewPassword from "./auth/ForgotPassword/SetNewPassword";
-import Profile from "./pages/ProfillePages";
 import ResetToken from "./routes/ResetRoute/index.";
 import OrderConfirmationPage from "./pages/ShoppingPages/OrderPage/OrderConfirmation";
 import OrderDetailUser from "./pages/ShoppingPages/OrderPage/OrderDetail/OrderDetail";
@@ -27,7 +26,8 @@ import Prefetch from "./routes/Prefetch";
 import BrandManagement from "./pages/DashboardPages/BrandManagement";
 import ErrorBoundary from "./components/common/Error";
 import BlogPage from "./pages/ShoppingPages/BlogPage";
-// import { UserLoader } from "./routes/userRoute";
+import CoffeeMixer from "./pages/ShoppingPages/MixCoffeePage";
+import CheckLoginRoute from "./routes/CheckLoginRoute";
 
 const router = createBrowserRouter([
   {
@@ -48,17 +48,15 @@ const router = createBrowserRouter([
           {
             path: "products",
             element: <ProductsPage />,
-            children: [],
           },
           {
-            path: "products/:id",
+            path: "product/:id",
             element: <ProductDetail />,
           },
           {
             path: "purchase",
             element: <OrderPage />,
           },
-          // { path: "purchase/order-detail", element: <OrderDetail /> },
           { path: "order/order-detail/:orderId", element: <OrderDetailUser /> },
           {
             path: "purchase/request-return",
@@ -71,15 +69,14 @@ const router = createBrowserRouter([
           {
             path: "cart",
             element: <CartPage />,
-            children: [{ path: "", element: "" }],
           },
           {
             path: "blog",
             element: <BlogPage />,
           },
           {
-            path: "profile",
-            element: <Profile />,
+            path: "mix-coffee",
+            element: <CoffeeMixer />,
           },
           {
             path: "order-confirmation",
@@ -112,9 +109,11 @@ const router = createBrowserRouter([
       {
         element: (
           <ProtectedRoute>
-            <Prefetch>
-              <DashboardLayout />
-            </Prefetch>
+            <CheckLoginRoute>
+              <Prefetch>
+                <DashboardLayout />
+              </Prefetch>
+            </CheckLoginRoute>
           </ProtectedRoute>
         ),
         path: "dashboard",
@@ -122,30 +121,24 @@ const router = createBrowserRouter([
           {
             path: "",
             element: <Dashboard />,
-            children: [],
           },
           {
             path: "products-management",
             element: <ProductManagement />,
-            children: [],
           },
           {
             path: "orders-management",
             element: <OrderManagement />,
-            children: [],
           },
           {
             path: "brands-management",
             element: <BrandManagement />,
-            children: [],
           },
           {
             path: "users-management",
-            // loader: <UserLoader />,
             shouldRevalidate: ({ currentUrl, nextUrl }) =>
               currentUrl.pathname !== nextUrl.pathname,
             element: <UserManagement />,
-            children: [],
           },
         ],
       },

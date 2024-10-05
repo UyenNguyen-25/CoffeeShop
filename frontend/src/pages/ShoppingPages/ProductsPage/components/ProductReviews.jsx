@@ -1,26 +1,26 @@
 import { UserOutlined } from '@ant-design/icons';
 import { Avatar, Button } from 'antd';
-import React, { useState } from 'react';
+import { useState } from 'react';
 import StarRating from './StarRating';
 
 const ProductReviews = ({ product }) => {
     const [filter, setFilter] = useState(0);
-    console.log('productttttttttttttttt', product)
+    // console.log('productttttttttttttttt', product)
 
     const filteredFeedbacks = filter === 0
-        ? product.feedback_id
-        : product.feedback_id.filter(feedback => feedback.feedback_rating === filter);
+        ? product?.feedback_id
+        : product?.feedback_id.filter(feedback => feedback.feedback_rating === filter);
 
-    const averageRating = product.feedback_id?.length > 0
-        ? product.feedback_id.reduce((acc, feedback) => acc + feedback.feedback_rating, 0) / product.feedback_id.length
+    const averageRating = product?.feedback_id?.length > 0
+        ? product?.feedback_id.reduce((acc, feedback) => acc + feedback.feedback_rating, 0) / product?.feedback_id.length
         : 0;
 
     return (
         <div className="bg-white shadow rounded-lg p-6">
-            <div className="bg-[#E7F3FF] py-4 pl-7 text-2xl font-bold mt-5">
+            <div className="bg-[#F1DEBC] py-4 pl-7 text-2xl font-bold mt-5">
                 ĐÁNH GIÁ SẢN PHẨM
             </div>
-            {product.feedback_id?.length > 0 ? (
+            {product?.feedback_id?.length > 0 ? (
                 <div className='flex gap-16'>
                     <div className=''>
                         <div className="flex items-center mt-3">
@@ -41,7 +41,7 @@ const ProductReviews = ({ product }) => {
                                     </svg>
                                 ))}
                             </div>
-                            <span className="text-xl text-red-600 ml-2">({product.feedback_id?.length})</span>
+                            <span className="text-xl text-red-600 ml-2">({product?.feedback_id?.length})</span>
                         </div>
                     </div>
                     <div className="flex mt-12 space-x-2">

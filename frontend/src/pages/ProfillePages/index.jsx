@@ -20,7 +20,7 @@ const Profile = () => {
     const onFinish = async () => {
         try {
             const values = await form.validateFields()
-            const newData = { ...values, ...userDetail, user_role: user.user_role.role_description }
+            const newData = { ...values, ...userDetail, user_role: user.role }
             // console.log(newData);
             await updateUser(newData).unwrap()
         } catch (error) {

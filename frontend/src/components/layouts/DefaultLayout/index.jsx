@@ -7,13 +7,10 @@ function DefaultLayout() {
     <div className="flex min-h-screen flex-col items-stretch">
       {/* Header */}
       <Header />
-
       {/* Main Content */}
       <div className="flex-1 overflow-y-auto bg-customer-home">
-        <main>
-          {/* Dynamic Route Content */}
-          <Outlet />
-        </main>
+        {/* Dynamic Route Content */}
+        <Outlet />
       </div>
       {/* </div> */}
 

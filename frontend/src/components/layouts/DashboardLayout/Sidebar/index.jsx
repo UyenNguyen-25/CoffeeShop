@@ -1,14 +1,14 @@
 import { selectCurrentUser } from "@/redux/features/auth/authSlice";
-import { ConfigProvider, Menu, Typography } from "antd";
+import { LeftOutlined, RightOutlined, FileTextOutlined, HomeOutlined, ShopOutlined, UserOutlined } from "@ant-design/icons";
+import { Button, ConfigProvider, Menu, Typography } from "antd";
 import Sider from "antd/es/layout/Sider";
-import { FileText, Hexagon, Home, Package, Users } from "lucide-react";
 import { useState } from "react";
 import { useSelector } from "react-redux";
 import { useLocation, useNavigate } from "react-router-dom";
 
 const Sidebar = () => {
   const user = useSelector(selectCurrentUser);
-  const user_role = user?.user_role.role_description;
+  const user_role = user?.role;
 
   const getItem = (label, key, icon, permission) => {
     return (
@@ -22,32 +22,24 @@ const Sidebar = () => {
   };
 
   const items = [
-    getItem("Home", "/dashboard", <Home size={20} />, [
+    getItem("Bảng điều khiển", "/dashboard", <HomeOutlined />, [
       "admin",
-      "manager",
       "staff",
     ]),
     getItem(
-      "Products Management",
+      "Quản lý sản phẩm",
       "products-management",
-      <Package size={20} />,
-      ["admin", "manager", "staff"]
+      <ShopOutlined />,
+      ["admin", "staff"]
     ),
-    getItem("Orders Management", "/dashboard/orders-management", <FileText size={20} />, [
+    getItem("Quản lý đơn hàng", "/dashboard/orders-management", <FileTextOutlined />, [
       "admin",
-      "manager",
       "staff",
     ]),
-    getItem("Users Management", "/dashboard/users-management", <Users size={20} />, [
+    getItem("Quản lý tài khoản", "/dashboard/users-management", <UserOutlined />, [
       "admin",
-      "manager",
       "staff",
-    ]),
-    getItem("Brand Management", "/dashboard/brands-management", <Hexagon size={20} />, [
-      "admin",
-      "manager",
-      "staff",
-    ]),
+    ])
   ];
 
   const [collapsed, setCollapsed] = useState(false);
@@ -68,29 +60,26 @@ const Sidebar = () => {
       }}
     >
       <Sider
-        collapsible
         collapsed={collapsed}
-        collapsedWidth={80}
-        onCollapse={(value) => setCollapsed(value)}
-        width={250}
-        style={{
-          background: "#61ADFD",
-        }}
+        className="h-screen relative"
       >
         {collapsed === false && (
-          <Typography.Title style={{ textAlign: "center", marginTop: 10 }}>
-            MENU
-          </Typography.Title>
+          <Typography className="text-center text-3xl font-semibold my-8">
+            Danh mục
+          </Typography>
         )}
         <Menu
           defaultSelectedKeys={location.pathname}
           mode="inline"
           items={items}
           onClick={(e) => handleNavigate(e.key)}
-          style={{
-            background: "#61ADFD",
-          }}
-        />
+          className="bg-transparent"
+        >
+        </Menu>
+        <Button size="large" onClick={() => setCollapsed(!collapsed)} className="absolute bottom-5 left-[100%] flex items-center rounded-s-none bg-[#001529] border-none">
+          {!collapsed ? <LeftOutlined size={22} /> :
+            <RightOutlined size={22} />}
+        </Button>
       </Sider>
     </ConfigProvider>
   );

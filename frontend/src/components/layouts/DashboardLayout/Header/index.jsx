@@ -1,7 +1,7 @@
 import { Layout, Typography, theme, Flex } from "antd";
 import DropdownCustomize from "../../../common/components/dropdown";
 import { useSelector } from "react-redux";
-import { ArrowRightLeft, LogOut, User } from "lucide-react";
+import { ArrowRightLeft, LogOut } from "lucide-react";
 import { selectCurrentUser } from "@/redux/features/auth/authSlice";
 const { Header } = Layout;
 
@@ -13,13 +13,7 @@ function Navbar() {
   const userDetail = useSelector(selectCurrentUser);
   const itemsProps = [
     {
-      label: "Hồ sơ",
-      key: "/profile",
-      icon: <User />,
-      permission: ["customer", "staff", "manager"]
-    },
-    {
-      label: "ConYeu",
+      label: "Hoa Đất",
       key: "/",
       icon: <ArrowRightLeft />,
     },
@@ -39,7 +33,7 @@ function Navbar() {
       }}
     >
       <Flex
-        className="w-full h-full px-6"
+        className="h-full w-full px-6 text-sm lg:text-[17px]"
         justify="space-between"
         align="center"
       >
@@ -47,11 +41,12 @@ function Navbar() {
           level={3}
           style={{ color: "#4C2113", marginBottom: 0, fontWeight: "bold" }}
         >
-          ConYeu Store - {userDetail?.user_role?.role_description.toUpperCase()}
+          HoaDat Dashboard - {userDetail?.role?.toUpperCase()}
         </Typography.Title>
         <DropdownCustomize
           itemsProps={itemsProps}
           className="bg-[#cfdcfd] text-[#4C2113]"
+          currentUser={userDetail}
         />
       </Flex>
     </Header>

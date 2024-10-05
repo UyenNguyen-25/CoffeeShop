@@ -1,6 +1,6 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import { useDeleteUserMutation, useUpdateUserMutation } from "@/redux/features/users/usersApiSlice";
-import { Form, Input, Popconfirm, Select, Table, Tag, Typography } from "antd";
+import { Form, Input, Popconfirm, Select, Table, Typography } from "antd";
 import { useForm } from "antd/es/form/Form";
 import { format } from "date-fns";
 import { useEffect, useState } from "react";
@@ -9,23 +9,12 @@ import { toast } from "sonner";
 const ROLE_OPTION = [
 
   {
-    value: "manager",
-    label: "MANAGER",
+    value: "admin",
+    label: "ADMIN",
   },
   {
     value: "staff",
     label: "STAFF",
-  },
-];
-
-const STATUS_OPTION = [
-  {
-    value: "true",
-    label: "Active",
-  },
-  {
-    value: "false",
-    label: "Inactive",
   },
 ];
 
@@ -93,7 +82,7 @@ export const EditableCell = ({
   );
 };
 
-const CustomTable = ({ list, Loading, employeeBtn, role, refetch, currentUser }) => {
+const CustomTable = ({ list, Loading, role, refetch, currentUser }) => {
   const [form] = useForm();
   const [data, setData] = useState();
   const [tableParams, setTableParams] = useState({
@@ -119,7 +108,7 @@ const CustomTable = ({ list, Loading, employeeBtn, role, refetch, currentUser })
   };
 
   const handleDelete = async (key) => {
-    await deleteUser({ user_id: key }).unwrap()
+    await deleteUser({ id: key }).unwrap()
   };
 
   const cancel = () => {
@@ -129,7 +118,7 @@ const CustomTable = ({ list, Loading, employeeBtn, role, refetch, currentUser })
   const save = async (key) => {
     try {
       const row = await form.validateFields();
-      const updateData = { ...row, user_role: row.user_role || "customer", user_status: row.user_status === "true", user_id: key };
+      const updateData = { ...row, role: row.role || "customer", status: row.status === "true", id: key };
       console.log(updateData);
       await updateUser(updateData).unwrap()
       setTimeout(() => { setEditingKey("") }, 2000)
@@ -164,53 +153,32 @@ const CustomTable = ({ list, Loading, employeeBtn, role, refetch, currentUser })
     },
     {
       title: "Full Name",
-      dataIndex: "user_fullname",
-      editable: employeeBtn && true,
-    },
-    {
-      title: "Phone Number",
-      dataIndex: "user_phoneNumber",
-      editable: employeeBtn && true,
-    },
-    {
-      title: "Date Created",
-      dataIndex: "createdAt",
-      render: (value) => format(new Date(value), "d/MM/yyy"),
-    },
-    {
-      title: "Role",
-      dataIndex: "user_role",
-      render: (value) => value?.toUpperCase(),
-      editable: employeeBtn,
-    },
-    {
-      title: "Status",
-      dataIndex: "user_status",
-      render: (status) =>
-        status === "true" ? (
-          <>
-            <Tag color="green">Active</Tag>
-          </>
-        ) : (
-          <>
-            <Tag color="volcano">Inactive</Tag>
-          </>
-        ),
-      filters: [
-        {
-          text: "Active",
-          value: true,
-        },
-        {
-          text: "Inactive",
-          value: false,
-        },
-      ],
-      onFilter: (value, record) => record.user_status === value,
+      dataIndex: "fullName",
       editable: true,
     },
     {
-      title: "Action",
+      title: "Số Điện Thoại",
+      dataIndex: "phoneNumber",
+      editable: true,
+    },
+    {
+      title: "Email",
+      dataIndex: "email",
+      editable: true,
+    },
+    {
+      title: "Ngày Tạo",
+      dataIndex: "createdAt",
+      render: (value) => value ? format(new Date(value), "d/MM/yyy") : "Không có dữ liệu",
+    },
+    {
+      title: "Role",
+      dataIndex: "role",
+      render: (value) => value?.toUpperCase(),
+      editable: true,
+    },
+    {
+      title: "",
       dataIndex: "action",
       hidden: role !== "admin",
       render: (_, record) => {
@@ -218,7 +186,7 @@ const CustomTable = ({ list, Loading, employeeBtn, role, refetch, currentUser })
         return editable ? (
           <span>
             <Typography.Link
-              onClick={() => save(record._id)}
+              onClick={() => save(record?._id)}
               style={{
                 marginRight: 10,
               }}
@@ -232,7 +200,7 @@ const CustomTable = ({ list, Loading, employeeBtn, role, refetch, currentUser })
         ) : (
           <>
             <Typography.Link
-              disabled={editingKey !== "" || record.user_phoneNumber === currentUser}
+              disabled={editingKey !== "" || record?.phoneNumber === currentUser}
               onClick={() => edit(record)}
               style={{
                 marginRight: 10,
@@ -241,8 +209,8 @@ const CustomTable = ({ list, Loading, employeeBtn, role, refetch, currentUser })
               Edit
             </Typography.Link>
 
-            <Popconfirm title="Sure to delete?" onConfirm={() => handleDelete(record._id)} >
-              <Typography.Link type="danger" disabled={editingKey !== "" || record.user_phoneNumber === currentUser}>Delete</Typography.Link>
+            <Popconfirm title="Sure to delete?" onConfirm={() => handleDelete(record?._id)} >
+              <Typography.Link type="danger" disabled={editingKey !== "" || record?.phoneNumber === currentUser}>Delete</Typography.Link>
             </Popconfirm>
           </>
         );
@@ -261,15 +229,12 @@ const CustomTable = ({ list, Loading, employeeBtn, role, refetch, currentUser })
         return {
           record,
           inputType:
-            col.dataIndex === "user_phoneNumber"
-              ? "number"
-              : col.dataIndex === "user_role" || col.dataIndex === "user_status"
-                ? "other"
-                : "text",
+            col.dataIndex === "phoneNumber" ? "number"
+              : col.dataIndex === "role" ? "other" : "text",
           dataIndex: col.dataIndex,
           title: col.title,
           editing: isEditing(record),
-          options: col.dataIndex === "user_role" ? ROLE_OPTION : STATUS_OPTION,
+          options: col.dataIndex === "user_role" && ROLE_OPTION
         };
       },
     };
@@ -305,15 +270,6 @@ const CustomTable = ({ list, Loading, employeeBtn, role, refetch, currentUser })
         onChange={handleTableChange}
         rowClassName="editable-row"
         loading={Loading}
-        expandable={{
-          expandedRowRender: (record) => {
-            const address = record?.address_id
-            return <>
-              <div className="w-full flex"><div className="w-1/5 font-semibold">Primary Address:</div><div className="w-1/2">{address?.address_line1.length > 0 ? address.address_line1 : "No data"}</div> </div>
-              <div className="w-full flex"><div className="w-1/5 font-semibold">Secondary Address:</div><div className="w-1/2">{address?.address_line2.length > 0 ? address.address_line2 : "No data"}</div> </div>
-            </>
-          },
-        }}
       />
     </Form>
   );

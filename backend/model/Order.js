@@ -3,9 +3,14 @@ const mongoose = require("mongoose");
 const OrderSchema = new mongoose.Schema(
   {
     orderCode: {
-      type: String,
+      type: Number,
       require: true,
     },
+    orderItems: [{
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "orderItem",
+      required: true,
+    }],
     email: {
       type: String,
       require: true,
@@ -26,9 +31,17 @@ const OrderSchema = new mongoose.Schema(
       type: Number,
       require: true,
     },
-    promotionCodeId: {
-      type: mongoose.Types.ObjectId,
-      ref: "promotionCode",
+    discountAmount: {
+      type: Number,
+      default: 0, 
+    },
+    shippingAddress: {
+      type: String,
+      require: true,
+    },
+    status: {
+      type: String,
+      require: true,
     },
   },
   { timestamps: true }
