@@ -11,9 +11,8 @@ const baseQuery = fetchBaseQuery({
     const token = localStorage.getItem("jwt");
     if (token) {
       headers.set("Authorization", `Bearer ${token}`);
-      return headers;
     }
-    return;
+    return headers;
   },
 });
 
