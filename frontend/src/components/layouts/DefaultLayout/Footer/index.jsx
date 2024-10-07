@@ -1,9 +1,9 @@
 import { momoLogo } from "@/assets/logo";
 import logo from "../../../../assets/logo-removebg.png"
-import { Navigate } from "react-router-dom";
-
+import { useNavigate } from "react-router-dom";
 
 function Footer() {
+  const navigate = useNavigate()
   return (
     <div className="mx-6 py-10 text-center md:text-left">
       <div className="grid-1 grid gap-8 md:grid-cols-2 lg:grid-cols-4">
@@ -109,7 +109,7 @@ function Footer() {
           </p>
           <button
             className="bg-[#9898984a] text-[#b28a62] font-semibold text-base p-2 px-7 rounded-lg"
-            onClick={() => <Navigate to={"/dashboard"} />}
+            onClick={() => navigate("/dashboard")}
           >
             Chuyển đến trang quản lý <br />
             (dành cho nhân viên)

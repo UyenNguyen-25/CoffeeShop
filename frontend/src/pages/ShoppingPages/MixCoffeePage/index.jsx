@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from 'react';
 import { Select, Slider, Button, Row, Col, Card, Typography, message, List } from 'antd';
-import { coffeeOptions, coffeeSuggestions } from '@/constant/CoffeeSuggestions';
+import { coffeeOptions, coffeeSuggestions } from '@/constants/CoffeeSuggestions';
 
 const { Option } = Select;
 const { Title, Paragraph } = Typography;

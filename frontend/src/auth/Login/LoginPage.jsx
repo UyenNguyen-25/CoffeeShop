@@ -1,4 +1,4 @@
-import { login_type } from "@/constant/loginType";
+import { login_type } from "@/constants/loginType";
 import { useLoginMutation } from "@/redux/features/auth/authApiSlice";
 import { setCredentials } from "@/redux/features/auth/authSlice";
 import { Button, Flex, Form, Input, Radio, Typography } from "antd";
@@ -26,7 +26,7 @@ const Login = () => {
       password: e.password,
     };
 
-    console.log(userLogin);
+    // console.log(userLogin);
 
     try {
       const { accessToken } = await login(userLogin).unwrap();

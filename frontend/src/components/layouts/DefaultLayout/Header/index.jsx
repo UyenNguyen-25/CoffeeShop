@@ -123,12 +123,14 @@ const ResponsiveHeader = () => {
   };
 
   return (
-    <Header className={`top-0 left-0 w-full z-50 transition-colors duration-200 max-md:px-3 px-8 h-fit ${currentLocation.pathname === "/"
-      ? "fixed" && scrollPosition > 50
-        ? "bg-black shadow-xl"
-        : window.innerWidth > 600 && "bg-transparent"
-      : "bg-[#F1DEBC] relative"
-      } ${window.innerWidth > 600 ? "fixed" : "sticky bg-black shadow-xl"}`}>
+    <Header className={`top-0 left-0 w-full z-50 transition-colors duration-200 max-md:px-3 px-8 h-fit 
+      ${window.innerWidth > 600 ? "fixed" : "sticky"}
+      ${currentLocation.pathname === "/"
+        ? scrollPosition > 50
+          ? "bg-black shadow-xl"
+          : window.innerWidth > 600 ? "bg-transparent" : "bg-black shadow-xl"
+        : "bg-[#F1DEBC] relative"
+      }`}>
 
       {/* Desktop-menu */}
       < div className="flex items-center justify-between h-full w-full" >

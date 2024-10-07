@@ -4,7 +4,7 @@ import bg from '../../../assets/bg.jpg';
 import { Button, Card, Carousel, Col, Image, Row, Typography } from "antd";
 import hatCapheImg from "@/assets/image_hat_cafe.jpg"
 import nongDanImg from "@/assets/image_nongdan.jpg"
-import { coffeeSuggestions } from "@/constant/CoffeeSuggestions";
+import { coffeeSuggestions } from "@/constants/CoffeeSuggestions";
 
 export default function HomePage() {
   const nav = useNavigate();
