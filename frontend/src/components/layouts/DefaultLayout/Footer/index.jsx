@@ -105,7 +105,7 @@ function Footer() {
                 clipRule="evenodd"
               />
             </svg>
-            + 01 234 567 89
+            0962167328
           </p>
           <button
             className="bg-[#9898984a] text-[#b28a62] font-semibold text-base p-2 px-7 rounded-lg"

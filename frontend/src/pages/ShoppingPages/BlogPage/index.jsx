@@ -67,31 +67,29 @@ export default function BlogPage() {
                         {selectedBlog ?
                             !isLoading ?
                                 <Card>
-                                    <div
+                                    <button
                                         onClick={() => handleBackToList()}
                                     >
                                         <ArrowLeft strokeWidth={2.25} size={20} />
-                                    </div>
+                                    </button>
                                     <div style={{ maxWidth: '800px', margin: '0 auto' }}>
                                         <Typography.Title level={2}
                                             style={{ textAlign: 'center' }}>{selectedBlog.title}</Typography.Title>
-                                        <Typography.Paragraph
-                                            style={{ textAlign: 'center' }}
-                                        >{selectedBlog.content}</Typography.Paragraph>
-                                        {popularPosts.map((post, index) => (
-                                            <Row key={index} style={{ marginBottom: '20px' }}>
-                                                <Col span={24}>
+                                        {selectedBlog.children.map((child, index) => (
+                                            <Row key={index}>
+                                                {child?.headerSection && <Typography.Title level={4} style={{ marginTop: 10, marginBottom: 20 }}>{child.headerSection}</Typography.Title>}
+                                                {child?.imageSection && <Col span={24}>
                                                     <Image
                                                         preview
-                                                        src={post?.avatar}
+                                                        src={child?.imageSection}
                                                         alt={`step-${index + 1}`}
                                                         width="100%"
                                                         style={{ objectFit: 'cover' }}
                                                     />
-                                                </Col>
+                                                </Col>}
                                                 <Col span={24}>
-                                                    <Typography.Paragraph style={{ paddingTop: '10px' }}>
-                                                        {post?.description}
+                                                    <Typography.Paragraph style={{ lineHeight: 1.8 }}>
+                                                        {child?.sectionContent()}
                                                     </Typography.Paragraph>
                                                 </Col>
                                             </Row>
