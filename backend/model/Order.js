@@ -43,6 +43,10 @@ const OrderSchema = new mongoose.Schema(
       type: String,
       require: true,
     },
+    isMix: {
+      type: Boolean,
+      require: true,
+    },
   },
   { timestamps: true }
 );

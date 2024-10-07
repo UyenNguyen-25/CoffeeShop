@@ -27,6 +27,7 @@ import { selectCurrentUser } from "@/redux/features/auth/authSlice";
 import EditAddress from "./EditAddress";
 import Icon from "@ant-design/icons/lib/components/Icon";
 import { Trash2 } from "lucide-react";
+import { coffeeOptions } from "@/constant/CoffeeSuggestions";
 
 const CartPage = () => {
   const nav = useNavigate();
@@ -240,61 +241,75 @@ const CartPage = () => {
                 </TableRow>
               </TableHeader>
               <TableBody>
-                {cartItems.map((item) => (
-                  <TableRow key={item.id} className="align-middle">
-                    <TableCell className="flex items-center gap-3">
-                      <img className="w-24 h-24 object-cover" src={item.img[0]} alt={item.name} />
-                      <div className="flex flex-col gap-3">
-                      <p className="w-full flex items-center font-normal text-base text-left">
-                        {item.name}
-                      </p>
-                      <div className="text-[rgba(0,0,0,.54)]">
-                      <p>Phân Loại Hàng: </p>
-                      <p>{types.find(type => type._id === item?.typeId)?.name || "Không xác định"}</p>
-                      </div>
-                      </div>
-                    </TableCell>
-                    <TableCell className="text-base font-semibold text-center">
-                      {formatter.format(item.price)}
-                    </TableCell>
-                    <TableCell className="text-center">
-                      <div className="flex gap-x-0">
-                        <button
-                          className="bg-[#E5E9EB] w-7 py-1 rounded-l-full font-bold"
-                          onClick={() => handleDecrease(item._id)}
-                        >
-                          <MinusOutlined />
-                        </button>
-                        <p className="bg-[#E5E9EB] text-center py-1 w-7 text-base">
-                          {item.quantity}
-                        </p>
-                        <button
-                          className="bg-[#E5E9EB] w-7 py-1 rounded-r-full font-bold"
-                          onClick={() => handleIncrease(item._id)}
-                        >
-                          <PlusOutlined />
-                        </button>
-                      </div>
-                    </TableCell>
-                    <TableCell className="text-base font-semibold text-center">
-                      <div className="flex gap-2 items-center">
-                        <span>{formatter.format(item.price * item.quantity)}</span>
-                        <Popconfirm
-                          title="Xóa sản phẩm khỏi giỏ hàng?"
-                          onConfirm={() => confirm(item._id)}
-                          onCancel={cancel}
-                          okText="Ok"
-                          cancelText="Hủy"
-                        >
-                          <button className="ml-4 text-red-600">
-                            <Trash2 color="#FF0000" />
-                          </button>
-                        </Popconfirm>
-                      </div>
-                    </TableCell>
-                  </TableRow>
-                ))}
-              </TableBody>
+  {cartItems.map((item) => (
+    <TableRow key={item.isMix ? item.mixDetails[0].productId : item._id} className="align-middle">
+      <TableCell className="flex items-center gap-3">
+        {item.isMix ? (
+          // Rendering mixed coffee item
+          <div>
+            <p className="font-normal text-base text-left">Cà phê trộn:</p>
+            {item.mixDetails.map((mix, index) => (
+              <div key={index} className="flex items-center gap-1">
+                <span>{coffeeOptions.find(option => option.id === mix.productId)?.label || "Không xác định"}: {mix.percentage}%</span>
+              </div>
+            ))}
+          </div>
+        ) : (
+          // Rendering regular product item
+          <div className="flex items-center">
+            <img className="w-24 h-24 object-cover" src={item.img[0]} alt={item.name} />
+            <div className="flex flex-col gap-3">
+              <p className="w-full flex items-center font-normal text-base text-left">{item.name}</p>
+              <div className="text-[rgba(0,0,0,.54)]">
+                <p>Phân Loại Hàng:</p>
+                <p>{types.find(type => type._id === item?.typeId)?.name || "Không xác định"}</p>
+              </div>
+            </div>
+          </div>
+        )}
+      </TableCell>
+      <TableCell className="text-base font-semibold text-center">
+        {formatter.format(item.price)}
+      </TableCell>
+      <TableCell className="text-center">
+        <div className="flex gap-x-0">
+          <button
+            className="bg-[#E5E9EB] w-7 py-1 rounded-l-full font-bold"
+            onClick={() => handleDecrease(item.isMix ? item.mixDetails[0].productId : item._id)}
+          >
+            <MinusOutlined />
+          </button>
+          <p className="bg-[#E5E9EB] text-center py-1 w-7 text-base">
+            {item.quantity}
+          </p>
+          <button
+            className="bg-[#E5E9EB] w-7 py-1 rounded-r-full font-bold"
+            onClick={() => handleIncrease(item.isMix ? item.mixDetails[0].productId : item._id)}
+          >
+            <PlusOutlined />
+          </button>
+        </div>
+      </TableCell>
+      <TableCell className="text-base font-semibold text-center">
+        <div className="flex gap-2 items-center">
+          <span>{formatter.format(item.price * item.quantity)}</span>
+          <Popconfirm
+            title="Xóa sản phẩm khỏi giỏ hàng?"
+            onConfirm={() => confirm(item.isMix ? item.mixDetails[0].productId : item._id)}
+            onCancel={cancel}
+            okText="Ok"
+            cancelText="Hủy"
+          >
+            <button className="ml-4 text-red-600">
+              <Trash2 color="#FF0000" />
+            </button>
+          </Popconfirm>
+        </div>
+      </TableCell>
+    </TableRow>
+  ))}
+</TableBody>
+
             </Table>
 
           </div>

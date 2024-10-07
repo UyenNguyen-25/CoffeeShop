@@ -1,6 +1,9 @@
 import { useEffect, useRef, useState } from 'react';
 import { Select, Slider, Button, Row, Col, Card, Typography, message, List } from 'antd';
 import { coffeeOptions, coffeeSuggestions } from '@/constant/CoffeeSuggestions';
+import { useDispatch } from 'react-redux';
+import { addToCart } from '@/redux/features/cart/cartSlice';
+import { BASE_URL } from '@/constants/apiConfig';
 
 const { Option } = Select;
 const { Title, Paragraph } = Typography;
@@ -12,6 +15,7 @@ const CoffeeMixer = () => {
     const [description, setDescription] = useState('');
     const [total, setTotal] = useState(0)
     const sectionRef = useRef(null);
+    const dispatch = useDispatch();
 
     const handleCoffeeChange = (value) => {
         setSelectedCoffees(value);
@@ -27,13 +31,55 @@ const CoffeeMixer = () => {
         setRatios({ ...ratios, [coffee]: value })
     };
 
-    const handleConfirm = () => {
+    const handleConfirm = async () => {
         if (total !== 100) {
             message.error('Tổng tỉ lệ phải bằng 100%!');
         } else {
-            generateDescription();
-            message.success('Công thức của bạn đã được xác nhận!');
+            const mixDetails = [];
+            for (let coffee of selectedCoffees) {
+                const selectedCoffeeOption = coffeeOptions.find(option => option.value === coffee);
+            if (selectedCoffeeOption) {
+                mixDetails.push({
+                    productId: selectedCoffeeOption.id,  // Trực tiếp lấy id từ coffeeOptions
+                    percentage: ratios[coffee],
+                });
+            }
+            }
+            try {
+                // Await the price calculation to ensure the price is available
+                const price = await calculatePrice(mixDetails);  
+                console.log('price', price);
+    
+                const newItem = {
+                    isMix: true,
+                    mixDetails,  // Chi tiết từng loại cà phê và tỷ lệ
+                    price,       // Giá tính toán dựa trên tỷ lệ mix (not a promise)
+                    quantity: 1,
+                };
+    
+                dispatch(addToCart(newItem)); // Only dispatch after price is resolved
+                message.success('Công thức của bạn đã được thêm vào giỏ hàng!');
+                resetRatios();
+            } catch (error) {
+                console.error("Error calculating price: ", error);
+                message.error("Có lỗi khi tính giá sản phẩm.");
+            }
         }
+    };
+
+    const calculatePrice = async (mixDetails) => {
+        let total = 0;
+        for (let detail of mixDetails) {
+            try {
+                const response = await fetch(`${BASE_URL}/api/product/get-product-by-id/${detail.productId}`);
+                const product = await response.json();
+                console.log('product', product.product.price)
+                total += (product.product.price * detail.percentage) / 100;
+            } catch (error) {
+                console.error('Failed to fetch product price', error);
+            }
+        }
+        return total;
     };
 
     useEffect(() => {
@@ -69,6 +115,7 @@ const CoffeeMixer = () => {
         setRatios(suggestion.ratio)
         scrollToSection();
     }
+    console.log('selectedCoffees', selectedCoffees);
 
     const sortCoffeeRatios = (coffeeRatios) => {
         const capitalize = (str) => str.charAt(0).toUpperCase() + str.slice(1);
@@ -243,7 +290,7 @@ const CoffeeMixer = () => {
                 <Row justify="center" gutter={[16, 16]} style={{ marginTop: '20px' }}>
                     <Col>
                         <Button type="primary" onClick={handleConfirm}>
-                            Thanh Toán
+                            Thêm vào giỏ
                         </Button>
                     </Col>
                     <Col>
