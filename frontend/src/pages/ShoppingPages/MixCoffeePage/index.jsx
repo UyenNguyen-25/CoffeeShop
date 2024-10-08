@@ -40,24 +40,23 @@ const CoffeeMixer = () => {
                 const selectedCoffeeOption = coffeeOptions.find(option => option.value === coffee);
             if (selectedCoffeeOption) {
                 mixDetails.push({
-                    productId: selectedCoffeeOption.id,  // Trực tiếp lấy id từ coffeeOptions
+                    productId: selectedCoffeeOption.id, 
                     percentage: ratios[coffee],
                 });
             }
             }
             try {
-                // Await the price calculation to ensure the price is available
                 const price = await calculatePrice(mixDetails);  
                 console.log('price', price);
     
                 const newItem = {
                     isMix: true,
-                    mixDetails,  // Chi tiết từng loại cà phê và tỷ lệ
-                    price,       // Giá tính toán dựa trên tỷ lệ mix (not a promise)
+                    mixDetails,
+                    price,     
                     quantity: 1,
                 };
     
-                dispatch(addToCart(newItem)); // Only dispatch after price is resolved
+                dispatch(addToCart(newItem)); 
                 message.success('Công thức của bạn đã được thêm vào giỏ hàng!');
                 resetRatios();
             } catch (error) {

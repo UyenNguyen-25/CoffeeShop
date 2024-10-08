@@ -12,7 +12,6 @@ const cartSlice = createSlice({
       const newItem = action.payload;
       console.log('newItem', newItem)
       console.log('state.items', state)
-      // Handle mixed coffee items separately
       const isMixItem = newItem.isMix;
       let existed;
       
