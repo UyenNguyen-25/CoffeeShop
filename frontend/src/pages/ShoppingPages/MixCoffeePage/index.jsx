@@ -17,8 +17,8 @@ const CoffeeMixer = () => {
     const sectionRef = useRef(null);
     const dispatch = useDispatch();
 
-    const grindingCost = 5000; // Chi phí xay cố định
-        let totalBeanPrice = 0; // Tổng giá tiền hạt
+    const grindingCost = 5000; 
+        let totalBeanPrice = 0; 
 
     const handleCoffeeChange = (value) => {
         setSelectedCoffees(value);
@@ -55,7 +55,7 @@ const CoffeeMixer = () => {
                 const newItem = {
                     isMix: true,
                     mixDetails,
-                    price: total, // Tổng giá đã tính
+                    price: total,
                     quantity: 1,
                 };
     
@@ -79,14 +79,14 @@ const CoffeeMixer = () => {
                 const response = await fetch(`${BASE_URL}/api/product/get-product-by-id/${detail.productId}`);
                 const product = await response.json();
                 const productPrice = product.product.price;
-                totalBeanPrice += (productPrice * detail.percentage) / 100; // Tính tổng giá tiền hạt
+                totalBeanPrice += (productPrice * detail.percentage) / 100; 
             } catch (error) {
                 console.error('Failed to fetch product price', error);
             }
         }
     
-        total = totalBeanPrice + grindingCost; // Cộng tổng giá tiền hạt và chi phí xay
-        return { totalBeanPrice, grindingCost, total }; // Trả về đối tượng chứa thông tin giá
+        total = totalBeanPrice + grindingCost; 
+        return { totalBeanPrice, grindingCost, total };
     };
     
 
@@ -268,15 +268,15 @@ const CoffeeMixer = () => {
     dataSource={[
         {
             title: "Tiền Hạt",
-            amount: `${totalBeanPrice.toLocaleString()} VND`, // Sử dụng giá trị động
+            amount: `${totalBeanPrice.toLocaleString()} VND`, 
         },
         {
             title: "Tiền Xay",
-            amount: `${grindingCost.toLocaleString()} VND`, // Sử dụng giá trị động
+            amount: `${grindingCost.toLocaleString()} VND`, 
         },
         {
             title: "Tổng Cộng",
-            amount: `${total.toLocaleString()} VND`, // Sử dụng giá trị động
+            amount: `${total.toLocaleString()} VND`, 
         },
     ]}
     renderItem={(item) => (
