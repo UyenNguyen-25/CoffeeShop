@@ -1,4 +1,5 @@
-import { momoLogo } from "@/assets/logo";
+import visaLogo from "../../../../assets/visa.jpg";
+import napasLogo from "../../../../assets/napas.jpg";
 import logo from "../../../../assets/logo-removebg.png"
 import { Navigate } from "react-router-dom";
 
@@ -11,21 +12,9 @@ function Footer() {
         <div>
           <h6 className="mb-4 flex items-center justify-center font-semibold uppercase md:justify-start">
             <img src={logo} className="w-[50%]" alt="Logo" />
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              viewBox="0 0 24 24"
-              fill="currentColor"
-              className="ml-2 h-5 w-5"
-            >
-              <path d="M12.378 1.602a.75.75 0 00-.756 0L3 6.632l9 5.25 9-5.25-8.622-5.03zM21.75 7.93l-9 5.25v9l8.628-5.032a.75.75 0 00.372-.648V7.93zM11.25 22.18v-9l-9-5.25v8.57a.75.75 0 00.372.648l8.628 5.033z" />
-            </svg>
-            Công ty cổ phần Con Yêu
           </h6>
           <p>
-            Chuỗi cửa hàng sữa cho mẹ bầu và em bé lớn nhất Việt Nam, có nhiều
-            chi nhánh trải khắp 63 tỉnh thành Việt Nam. Tự hào là nguồn sữa
-            chính hãng, nguồn gốc xuất xứ rõ ràng, đảm bảo sức khỏe cho mẹ bầu
-            và em bé.
+          Hoa Đất - Xưởng cung cấp cà phê sạch tốt cho sức khỏe. Chúng tôi tự hào cung cấp những hạt cà phê chất lượng cao, được chọn lọc từ các vùng trồng cà phê nổi tiếng. Hoa Đất cam kết mang đến cho bạn trải nghiệm thưởng thức cà phê tuyệt vời nhất. Hãy cùng khám phá hương vị đậm đà và phong phú mà chúng tôi mang đến!
           </p>
         </div>
         {/* <!-- Products section --> */}
@@ -43,11 +32,6 @@ function Footer() {
               Mua & giao nhận Online
             </a>
           </p>
-          <p className="mb-4">
-            <a className="text-neutral-600 dark:text-neutral-200">
-              Đổi trả & Hoàn tiền
-            </a>
-          </p>
         </div>
         {/* <!-- Useful links section --> */}
         <div className="max-md:mx-auto">
@@ -55,13 +39,24 @@ function Footer() {
             Chấp nhận thanh toán
           </h6>
 
+          <div className="flex gap-5">
+
           <p className="mb-4">
             <img
               className="text-neutral-600 dark:text-neutral-200 w-10"
-              src={momoLogo}
-              alt="MoMo logo"
+              src={visaLogo}
+              alt="Visa logo"
             />
           </p>
+
+          <p className="mb-4">
+            <img
+              className="text-neutral-600 dark:text-neutral-200 w-10"
+              src={napasLogo}
+              alt="Napas logo"
+            />
+          </p>
+          </div>
         </div>
         {/* <!-- Contact section --> */}
         <div>

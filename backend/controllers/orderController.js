@@ -44,24 +44,25 @@ const orderController = {
       const savedOrderItems = await Promise.all(
         orderItems.map(async (item) => {
           if (item.isMix && item.mixDetails && item.mixDetails.length > 0) {
-            const mixDetails = await Promise.all(
-              item.mixDetails.map(async (mixItem) => {
-                const newMixItem = new OrderItem({
-                  productId: mixItem.productId,
-                  quantity: item.quantity, 
-                  price: (item.price * mixItem.percentage) / 100, 
-                });
-                return await newMixItem.save();
-              })
-            );
-  
-            return mixDetails;
+            const newOrderItem = new OrderItem({
+              productId: null, 
+              quantity: item.quantity,
+              price: item.price, 
+              isMix: true,  
+              mixDetails: item.mixDetails.map(mixItem => ({
+                productId: mixItem.productId,
+                percentage: mixItem.percentage,
+              })),
+            });
+            return await newOrderItem.save();
           } else {
             const newOrderItem = new OrderItem({
               productId: item.productId,
               quantity: item.quantity,
               typeId: item.typeId,
               price: item.price,
+              isMix: false,  
+              mixDetails: null,
             });
             return await newOrderItem.save();
           }
@@ -102,6 +103,7 @@ const orderController = {
       return res.status(500).json(error);
     }
   },
+  
   
 };
 

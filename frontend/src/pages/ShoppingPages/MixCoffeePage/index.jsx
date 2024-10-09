@@ -17,6 +17,9 @@ const CoffeeMixer = () => {
     const sectionRef = useRef(null);
     const dispatch = useDispatch();
 
+    const grindingCost = 5000; // Chi phí xay cố định
+        let totalBeanPrice = 0; // Tổng giá tiền hạt
+
     const handleCoffeeChange = (value) => {
         setSelectedCoffees(value);
         resetRatios();
@@ -38,21 +41,21 @@ const CoffeeMixer = () => {
             const mixDetails = [];
             for (let coffee of selectedCoffees) {
                 const selectedCoffeeOption = coffeeOptions.find(option => option.value === coffee);
-            if (selectedCoffeeOption) {
-                mixDetails.push({
-                    productId: selectedCoffeeOption.id, 
-                    percentage: ratios[coffee],
-                });
-            }
+                if (selectedCoffeeOption) {
+                    mixDetails.push({
+                        productId: selectedCoffeeOption.id,
+                        percentage: ratios[coffee],
+                    });
+                }
             }
             try {
-                const price = await calculatePrice(mixDetails);  
-                console.log('price', price);
+                const { totalBeanPrice, grindingCost, total } = await calculatePrice(mixDetails);  
+                console.log('price', total);
     
                 const newItem = {
                     isMix: true,
                     mixDetails,
-                    price,     
+                    price: total, // Tổng giá đã tính
                     quantity: 1,
                 };
     
@@ -65,21 +68,27 @@ const CoffeeMixer = () => {
             }
         }
     };
+    
 
     const calculatePrice = async (mixDetails) => {
         let total = 0;
+        
+    
         for (let detail of mixDetails) {
             try {
                 const response = await fetch(`${BASE_URL}/api/product/get-product-by-id/${detail.productId}`);
                 const product = await response.json();
-                console.log('product', product.product.price)
-                total += (product.product.price * detail.percentage) / 100;
+                const productPrice = product.product.price;
+                totalBeanPrice += (productPrice * detail.percentage) / 100; // Tính tổng giá tiền hạt
             } catch (error) {
                 console.error('Failed to fetch product price', error);
             }
         }
-        return total;
+    
+        total = totalBeanPrice + grindingCost; // Cộng tổng giá tiền hạt và chi phí xay
+        return { totalBeanPrice, grindingCost, total }; // Trả về đối tượng chứa thông tin giá
     };
+    
 
     useEffect(() => {
         setTotal(ratios.arabica + ratios.robusta + ratios.culi)
@@ -253,32 +262,33 @@ const CoffeeMixer = () => {
                     <Col xs={24} sm={12} lg={8}>
                         <Card>
                             <Paragraph>
-                                <List
-                                    header={<div><strong>Thành Tiền</strong></div>}
-                                    bordered={false}
-                                    dataSource={[
-                                        {
-                                            title: "Tiền Hạt",
-                                            amount: "50,000 VND", // Số tiền hạt
-                                        },
-                                        {
-                                            title: "Tiền Xay",
-                                            amount: "10,000 VND", // Số tiền xay
-                                        },
-                                        {
-                                            title: "Tổng Cộng",
-                                            amount: "60,000 VND", // Tổng cộng tiền
-                                        },
-                                    ]}
-                                    renderItem={(item) => (
-                                        <List.Item>
-                                            <div style={{ display: 'flex', justifyContent: 'space-between', width: '100%' }}>
-                                                <span>{item.title}</span>
-                                                <span>{item.amount}</span>
-                                            </div>
-                                        </List.Item>
-                                    )}
-                                />
+                            <List
+    header={<div><strong>Thành Tiền</strong></div>}
+    bordered={false}
+    dataSource={[
+        {
+            title: "Tiền Hạt",
+            amount: `${totalBeanPrice.toLocaleString()} VND`, // Sử dụng giá trị động
+        },
+        {
+            title: "Tiền Xay",
+            amount: `${grindingCost.toLocaleString()} VND`, // Sử dụng giá trị động
+        },
+        {
+            title: "Tổng Cộng",
+            amount: `${total.toLocaleString()} VND`, // Sử dụng giá trị động
+        },
+    ]}
+    renderItem={(item) => (
+        <List.Item>
+            <div style={{ display: 'flex', justifyContent: 'space-between', width: '100%' }}>
+                <span>{item.title}</span>
+                <span>{item.amount}</span>
+            </div>
+        </List.Item>
+    )}
+/>
+
                                 {total !== 100 && "Còn thiếu: " + (100 - total) + "%"}
                             </Paragraph>
                         </Card>

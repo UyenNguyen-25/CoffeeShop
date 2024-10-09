@@ -1,4 +1,5 @@
 const nodemailer = require("nodemailer");
+const Product = require("../model/Product");
 require("dotenv").config();
 
 const SENDER_MAIL = `${process.env.SENDER_EMAIL_ADDRESS}`;
@@ -27,6 +28,15 @@ const logo =
         ],
       });
       console.log("order", order);
+
+      for (const item of order.orderItems) {
+        if (item.isMix && item.mixDetails) {
+          for (const mixItem of item.mixDetails) {
+            const product = await Product.findById(mixItem.productId).select('name');
+            mixItem.productName = product.name; 
+          }
+        }
+      }
   
       const orderItemsHtml = order.orderItems
         .map((item) => {
@@ -43,11 +53,11 @@ const logo =
   
             return `
             <div style="display: flex; justify-content: space-around;">
-              <img style="width: 150px;" src=${item.productId.img[0]} />
+              <img style="width: 150px;" src="https://product.hstatic.net/200000379831/product/brazil_-_cerrado__1___1__18349eda14094bd8a376a54bb2297553_large.png" />
               <div>
-                <p style="font-weight: 600; padding-left: 30px">${item.productId.name}</p>
+              <p style="padding-left: 30px">Cà phê trộn</p>
                 <p style="color: darkgrey; padding-left: 30px">x ${item.quantity}</p>
-                <p style="padding-left: 30px">Phân loại: ${item.typeId.name}</p>
+                
                 <div style="padding-left: 30px;">Các thành phần mix:</div>
                 ${mixDetailsHtml}
               </div>
