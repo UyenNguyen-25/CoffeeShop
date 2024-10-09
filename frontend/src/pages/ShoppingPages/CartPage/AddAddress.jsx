@@ -151,7 +151,7 @@ const AddAddress = ({ setShippingAddress }) => {
             </Button>
             <Modal
                 title="Thêm Mới Địa Chỉ Nhận Hàng"
-                visible={isModalVisible}
+                open={isModalVisible}
                 onCancel={handleCancel}
                 footer={[
                     <Button key="cancel" onClick={handleCancel}>
@@ -165,6 +165,16 @@ const AddAddress = ({ setShippingAddress }) => {
                 <Form
                     layout="vertical"
                     onFinish={handleSubmit(onFinish)}
+                    initialValues={{
+                        name: "",
+                        email: "",
+                        phone: "",
+                        address: "",
+                        province: "",
+                        district: "",
+                        town: "",
+                        remember: ""
+                    }}
                 >
                     <Form.Item
                         label="Họ và tên"
@@ -311,7 +321,7 @@ const AddAddress = ({ setShippingAddress }) => {
                         <Controller
                             control={control}
                             name="remember"
-                            render={({ field }) => <Checkbox>Địa chỉ mặc định</Checkbox>}
+                            render={() => <Checkbox>Địa chỉ mặc định</Checkbox>}
                             defaultValue=""
                         />
                     </Form.Item>

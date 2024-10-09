@@ -25,7 +25,7 @@ import { BASE_URL } from "@/constants/apiConfig";
 import cart from "../../../assets/cart.png";
 import EditAddress from "./EditAddress";
 import { Trash2 } from "lucide-react";
-import { coffeeOptions } from "@/constant/CoffeeSuggestions";
+import { coffeeOptions } from "@/constants/CoffeeSuggestions";
 
 const CartPage = () => {
   const nav = useNavigate();
@@ -84,7 +84,7 @@ const CartPage = () => {
     }
   };
 
-  console.log('cart', cartItems)
+  // console.log('cart', cartItems)
 
   useEffect(() => {
     const storedAddress = localStorage.getItem('shippingAddress');

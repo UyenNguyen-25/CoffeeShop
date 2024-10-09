@@ -50,7 +50,7 @@ const DetailProduct = ({ product }) => {
       />
       <Modal
         title="Product Details"
-        visible={isModalVisible}
+        open={isModalVisible}
         onCancel={handleCancel}
         footer={null}
         width={1000}

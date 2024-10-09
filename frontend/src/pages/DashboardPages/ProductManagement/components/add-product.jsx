@@ -92,7 +92,7 @@ const AddProduct = ({ setFilteredData }) => {
         position: "top-right",
       });
     }
-    
+
   };
 
   const [isModalVisible, setIsModalVisible] = React.useState(false);
@@ -131,7 +131,7 @@ const AddProduct = ({ setFilteredData }) => {
       </Button>
       <Modal
         title="Add Product"
-        visible={isModalVisible}
+        open={isModalVisible}
         onCancel={handleCancel}
         footer={[
           <Button key="cancel" onClick={handleCancel}>

@@ -134,7 +134,7 @@ const EditProduct = ({
       />
       <Modal
         title="Edit Product"
-        visible={isEditModalVisible}
+        open={isEditModalVisible}
         onCancel={handleCancel}
         footer={[
           <Button key="cancel" onClick={handleCancel}>

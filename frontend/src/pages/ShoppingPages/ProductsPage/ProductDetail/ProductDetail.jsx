@@ -24,7 +24,7 @@ const ProductDetail = () => {
     style: "currency",
     currency: "VND",
   });
-  const { data: detailProduct, isLoading: detailLoading, isError: detailError } = useGetProductDetailQuery(id);
+  const { data: detailProduct, isLoading: detailLoading, isError: detailError } = useGetProductDetailQuery({ id });
   const { data: typeData, isLoading: typeLoading, isError: typeError } = useGetTypesQuery()
 
   useEffect(() => {

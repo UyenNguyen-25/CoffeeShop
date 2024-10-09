@@ -14,7 +14,16 @@ export const productsApiSlice = apiSlice.injectEndpoints({
       query: (arg) => ({
         url: `${PRODUCTS_URL}/get-all-product`,
       }),
-      invalidatesTags: [{ type: "Product", id: "LIST" }],
+      providesTags: (result) =>
+        // is result available?
+        result
+          ? // successful query
+            [
+              ...result.map(({ id }) => ({ type: "Posts", id })),
+              { type: "Posts", id: "LIST" },
+            ]
+          : // an error occurred, but we still want to refetch this query when `{ type: 'Posts', id: 'LIST' }` is invalidated
+            [{ type: "Posts", id: "LIST" }],
     }),
     getSoldProducts: builder.query({
       query: (arg) => ({
@@ -22,9 +31,10 @@ export const productsApiSlice = apiSlice.injectEndpoints({
       }),
     }),
     getProductDetail: builder.query({
-      query: (id) => ({
+      query: ({ id }) => ({
         url: `${PRODUCTS_URL}/get-product-by-id/${id}`,
       }),
+      invalidatesTags: (result, error, { id }) => [{ type: "Posts", id }],
     }),
   }),
 });

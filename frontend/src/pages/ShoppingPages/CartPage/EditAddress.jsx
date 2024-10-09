@@ -214,7 +214,7 @@ const EditAddress = ({ setShippingAddress, shippingAddress }) => {
             </Button>
             <Modal
                 title="Thêm Mới Địa Chỉ Nhận Hàng"
-                visible={isModalVisible}
+                open={isModalVisible}
                 onCancel={handleCancel}
                 footer={[
                     <Button key="cancel" onClick={handleCancel}>
@@ -228,6 +228,16 @@ const EditAddress = ({ setShippingAddress, shippingAddress }) => {
                 <Form
                     layout="vertical"
                     onFinish={handleSubmit(onFinish)}
+                    initialValues={{
+                        name: shippingAddress?.fullname,
+                        email: "",
+                        phone: shippingAddress?.phoneNumber,
+                        address: address_line1[0],
+                        province: address_line1[3],
+                        district: address_line1[2],
+                        town: town ? '' : address_line1[1],
+                        isDefault: isDefault
+                    }}
                 >
                     <Form.Item
                         label="Họ và tên"
@@ -242,7 +252,6 @@ const EditAddress = ({ setShippingAddress, shippingAddress }) => {
                         <Controller
                             control={control}
                             name="name"
-                            defaultValue={shippingAddress?.fullname}
                             render={({ field }) => <Input {...field} />}
                         />
                     </Form.Item>
@@ -279,7 +288,6 @@ const EditAddress = ({ setShippingAddress, shippingAddress }) => {
                         <Controller
                             control={control}
                             name="phone"
-                            defaultValue={shippingAddress?.phoneNumber}
                             render={({ field }) => <Input {...field} />}
                         />
                     </Form.Item>
@@ -299,7 +307,6 @@ const EditAddress = ({ setShippingAddress, shippingAddress }) => {
                         <Controller
                             control={control}
                             name="address"
-                            defaultValue={address_line1[0]}
                             render={({ field }) => <Input {...field} />}
                         />
                     </Form.Item>
@@ -313,7 +320,6 @@ const EditAddress = ({ setShippingAddress, shippingAddress }) => {
                         <Controller
                             control={control}
                             name="province"
-                            defaultValue={address_line1[3]}
                             render={({ field }) => (
                                 <Select {...field} placeholder="Hãy chọn Tỉnh/ Thành phố" value={field.value} onChange={handleProvinceChange}>
                                     {provinces.map((prov) => (
@@ -336,7 +342,6 @@ const EditAddress = ({ setShippingAddress, shippingAddress }) => {
                         <Controller
                             control={control}
                             name="district"
-                            defaultValue={address_line1[2]}
                             render={({ field }) => (
                                 <Select {...field} placeholder="Hãy chọn Quận/ Huyện!" value={field.value} onChange={handleDistrictChange} defaultValue={findDistrictIdByName(address_line1[2])}>
                                     {districts.map((dist) => (
@@ -357,7 +362,6 @@ const EditAddress = ({ setShippingAddress, shippingAddress }) => {
                         <Controller
                             control={control}
                             name="town"
-                            defaultValue={town ? '' : address_line1[1]}
                             render={({ field }) => (
                                 <Select {...field} placeholder="Hãy chọn Phường/ Xã!" value={field.value} onChange={handleTownChange}>
                                     {towns.map((town) => (
@@ -380,7 +384,6 @@ const EditAddress = ({ setShippingAddress, shippingAddress }) => {
                             control={control}
                             name="isDefault"
                             render={({ field }) => <Checkbox {...field} onChange={(e) => setIsDefault(e.target.checked)}>Địa chỉ mặc định</Checkbox>}
-                            defaultValue={isDefault}
                         />
                     </Form.Item>
                 </Form>
