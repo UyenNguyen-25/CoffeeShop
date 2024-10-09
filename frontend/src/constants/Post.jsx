@@ -56,7 +56,7 @@ export const popularPosts = [
         sectionContent: () => (
           <ul>
             <li>Hotline: 0962167328</li>
-            <li>Email: hoadatcoffee@gmail.com</li>
+            <li>Email: hoadat@gmail.com</li>
           </ul>
         ),
         imageSection: "",
@@ -197,7 +197,7 @@ export const popularPosts = [
         sectionContent: () => (
           <ul>
             <li>Hotline: 0962167328</li>
-            <li>Email: hoadatcoffee@gmail.com</li>
+            <li>Email: hoadat@gmail.com</li>
           </ul>
         ),
         imageSection: "",
@@ -251,7 +251,7 @@ export const popularPosts = [
         sectionContent: () => (
           <ul>
             <li>Hotline: 0962167328</li>
-            <li>Email: hoadatcoffee@gmail.com</li>
+            <li>Email: hoadat@gmail.com</li>
           </ul>
         ),
         imageSection: "",

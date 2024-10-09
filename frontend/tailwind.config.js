@@ -75,9 +75,6 @@ module.exports = {
       backgroundImage: {
         "login-bg": "url('@/assets/login-bg.jpg')",
       },
-      fontFamily: {
-        "header-logo": ['"Dancing Script"', "sans-serif"],
-      },
     },
   },
   plugins: [require("tailwindcss-animate")],
