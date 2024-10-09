@@ -17,8 +17,8 @@ const CoffeeMixer = () => {
     const sectionRef = useRef(null);
     const dispatch = useDispatch();
 
-    const grindingCost = 5000; 
-        let totalBeanPrice = 0; 
+    const grindingCost = 5000;
+    let totalBeanPrice = 0;
 
     const handleCoffeeChange = (value) => {
         setSelectedCoffees(value);
@@ -49,17 +49,17 @@ const CoffeeMixer = () => {
                 }
             }
             try {
-                const { totalBeanPrice, grindingCost, total } = await calculatePrice(mixDetails);  
+                const { totalBeanPrice, grindingCost, total } = await calculatePrice(mixDetails);
                 console.log('price', total);
-    
+
                 const newItem = {
                     isMix: true,
                     mixDetails,
                     price: total,
                     quantity: 1,
                 };
-    
-                dispatch(addToCart(newItem)); 
+
+                dispatch(addToCart(newItem));
                 message.success('Công thức của bạn đã được thêm vào giỏ hàng!');
                 resetRatios();
             } catch (error) {
@@ -68,27 +68,27 @@ const CoffeeMixer = () => {
             }
         }
     };
-    
+
 
     const calculatePrice = async (mixDetails) => {
         let total = 0;
-        
-    
+
+
         for (let detail of mixDetails) {
             try {
                 const response = await fetch(`${BASE_URL}/api/product/get-product-by-id/${detail.productId}`);
                 const product = await response.json();
                 const productPrice = product.product.price;
-                totalBeanPrice += (productPrice * detail.percentage) / 100; 
+                totalBeanPrice += (productPrice * detail.percentage) / 100;
             } catch (error) {
                 console.error('Failed to fetch product price', error);
             }
         }
-    
-        total = totalBeanPrice + grindingCost; 
+
+        total = totalBeanPrice + grindingCost;
         return { totalBeanPrice, grindingCost, total };
     };
-    
+
 
     useEffect(() => {
         setTotal(ratios.arabica + ratios.robusta + ratios.culi)
@@ -262,32 +262,32 @@ const CoffeeMixer = () => {
                     <Col xs={24} sm={12} lg={8}>
                         <Card>
                             <Paragraph>
-                            <List
-    header={<div><strong>Thành Tiền</strong></div>}
-    bordered={false}
-    dataSource={[
-        {
-            title: "Tiền Hạt",
-            amount: `${totalBeanPrice.toLocaleString()} VND`, 
-        },
-        {
-            title: "Tiền Xay",
-            amount: `${grindingCost.toLocaleString()} VND`, 
-        },
-        {
-            title: "Tổng Cộng",
-            amount: `${total.toLocaleString()} VND`, 
-        },
-    ]}
-    renderItem={(item) => (
-        <List.Item>
-            <div style={{ display: 'flex', justifyContent: 'space-between', width: '100%' }}>
-                <span>{item.title}</span>
-                <span>{item.amount}</span>
-            </div>
-        </List.Item>
-    )}
-/>
+                                <List
+                                    header={<div><strong>Thành Tiền</strong></div>}
+                                    bordered={false}
+                                    dataSource={[
+                                        {
+                                            title: "Tiền Hạt",
+                                            amount: `${totalBeanPrice.toLocaleString()} VND`,
+                                        },
+                                        {
+                                            title: "Tiền Xay",
+                                            amount: `${grindingCost.toLocaleString()} VND`,
+                                        },
+                                        {
+                                            title: "Tổng Cộng",
+                                            amount: `${total.toLocaleString()} VND`,
+                                        },
+                                    ]}
+                                    renderItem={(item) => (
+                                        <List.Item>
+                                            <div style={{ display: 'flex', justifyContent: 'space-between', width: '100%' }}>
+                                                <span>{item.title}</span>
+                                                <span>{item.amount}</span>
+                                            </div>
+                                        </List.Item>
+                                    )}
+                                />
 
                                 {total !== 100 && "Còn thiếu: " + (100 - total) + "%"}
                             </Paragraph>
