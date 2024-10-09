@@ -36,44 +36,26 @@ const orderController = {
         payment_method,
         orderItems,
       } = req.body;
-  
+
       const orderCode = await orderController.generateUniqueOrderCode();
       console.log("orderCode", orderCode);
-      console.log("orderItems", orderItems);
-  
+
       const savedOrderItems = await Promise.all(
         orderItems.map(async (item) => {
-          if (item.isMix && item.mixDetails && item.mixDetails.length > 0) {
-            const newOrderItem = new OrderItem({
-              productId: null, 
-              quantity: item.quantity,
-              price: item.price, 
-              isMix: true,  
-              mixDetails: item.mixDetails.map(mixItem => ({
-                productId: mixItem.productId,
-                percentage: mixItem.percentage,
-              })),
-            });
-            return await newOrderItem.save();
-          } else {
-            const newOrderItem = new OrderItem({
-              productId: item.productId,
-              quantity: item.quantity,
-              typeId: item.typeId,
-              price: item.price,
-              isMix: false,  
-              mixDetails: null,
-            });
-            return await newOrderItem.save();
-          }
+          const newOrderItem = new OrderItem({
+            productId: item.productId,
+            quantity: item.quantity,
+            typeId: item.typeId,
+            price: item.price,
+          });
+          return await newOrderItem.save();
         })
       );
-  
-      const flatSavedOrderItems = savedOrderItems.flat();
-  
+      console.log("savedOrderItems", savedOrderItems);
+
       const newOrder = new Order({
         orderCode,
-        orderItems: flatSavedOrderItems.map((item) => item._id),
+        orderItems: savedOrderItems.map((item) => item._id),
         email,
         phoneNumber,
         fullName,
@@ -84,9 +66,9 @@ const orderController = {
         discountAmount,
         status: "pending",
       });
-  
+
       await newOrder.save();
-  
+
       const newPayment = new Payment({
         orderId: newOrder._id,
         orderCode: newOrder.orderCode,
@@ -94,17 +76,15 @@ const orderController = {
         paymentStatus: "Unpaid",
       });
       await newPayment.save();
-  
+
       sendMail(email, newOrder);
-  
+
       return res.status(201).json(newOrder);
     } catch (error) {
       console.log("Error: ", error);
       return res.status(500).json(error);
     }
   },
-  
-  
 };
 
 module.exports = orderController;

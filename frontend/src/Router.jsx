@@ -23,11 +23,11 @@ import OrderConfirmationPage from "./pages/ShoppingPages/OrderPage/OrderConfirma
 import OrderDetailUser from "./pages/ShoppingPages/OrderPage/OrderDetail/OrderDetail";
 import Dashboard from "./pages/DashboardPages/Dashboard";
 import Prefetch from "./routes/Prefetch";
+import BrandManagement from "./pages/DashboardPages/BrandManagement";
 import ErrorBoundary from "./components/common/Error";
 import BlogPage from "./pages/ShoppingPages/BlogPage";
 import CoffeeMixer from "./pages/ShoppingPages/MixCoffeePage";
 import CheckLoginRoute from "./routes/CheckLoginRoute";
-import PromotionManagement from "./pages/DashboardPages/PromotionManagement";
 
 const router = createBrowserRouter([
   {
@@ -131,8 +131,8 @@ const router = createBrowserRouter([
             element: <OrderManagement />,
           },
           {
-            path: "promotions-management",
-            element: <PromotionManagement />,
+            path: "brands-management",
+            element: <BrandManagement />,
           },
           {
             path: "users-management",

@@ -12,17 +12,7 @@ const cartSlice = createSlice({
       const newItem = action.payload;
       console.log('newItem', newItem)
       console.log('state.items', state)
-      const isMixItem = newItem.isMix;
-      let existed;
-      
-      if (isMixItem) {
-        existed = state.items.find((item) => 
-          item.isMix && JSON.stringify(item.mixDetails) === JSON.stringify(newItem.mixDetails)
-        );
-      } else {
-        existed = state.items.find((item) => item._id === newItem._id);
-      }
-
+      const existed = state.items.find((item) => item._id === newItem._id);
       if (!existed) {
         state.items.push({ ...newItem, quantity: newItem.quantity });
       } else {

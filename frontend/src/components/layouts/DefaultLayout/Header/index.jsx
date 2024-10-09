@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { Layout, Menu, Drawer, Button, Dropdown, Flex, Badge, Avatar, Image } from 'antd';
+import { Layout, Menu, Drawer, Button, Dropdown, Flex, Badge, Avatar } from 'antd';
 import { CoffeeOutlined, MenuOutlined, SyncOutlined } from '@ant-design/icons';
 import { useSelector } from 'react-redux';
 import { selectCurrentUser } from '@/redux/features/auth/authSlice';
@@ -7,7 +7,7 @@ import { NavLink, useLocation, useNavigate } from 'react-router-dom';
 import { ArrowRightLeft, ChevronDown, LogOut, ShoppingCart } from 'lucide-react';
 import { useSendLogoutMutation } from '@/redux/features/auth/authApiSlice';
 import { toast } from 'sonner';
-import HoaDatLogo from '@/assets/HoaDatLogo.png';
+import HoaDatLogo from '@/assets/Logo-HoaDat';
 
 const { Header } = Layout;
 
@@ -30,8 +30,6 @@ const ResponsiveHeader = () => {
       window.removeEventListener("scroll", handleScroll);
     };
   }, []);
-
-  useEffect(() => { setDrawerOpen(false) }, [currentLocation])
 
   const countCart = cart?.items?.reduce((accumulator, currentValue) => {
     return accumulator + currentValue.quantity;
@@ -135,8 +133,8 @@ const ResponsiveHeader = () => {
       }`}>
 
       {/* Desktop-menu */}
-      < div className="flex items-center justify-between h-min w-full" >
-        <Image src={HoaDatLogo} preview={false} width={"10%"} onClick={() => navigate("/")} style={{ minWidth: 110, padding: 10 }} />
+      < div className="flex items-center justify-between h-full w-full" >
+        <HoaDatLogo width={"10%"} height={"20%"} onClick={() => navigate("/")} />
         <div className="flex space-x-5 lg:space-x-10 max-lg:hidden">
           {routes.map((route) => {
             return route.path !== "/products" ? (

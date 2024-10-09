@@ -1,9 +1,6 @@
 import { useEffect, useRef, useState } from 'react';
 import { Select, Slider, Button, Row, Col, Card, Typography, message, List } from 'antd';
-import { coffeeOptions, coffeeSuggestions } from '@/constant/CoffeeSuggestions';
-import { useDispatch } from 'react-redux';
-import { addToCart } from '@/redux/features/cart/cartSlice';
-import { BASE_URL } from '@/constants/apiConfig';
+import { coffeeOptions, coffeeSuggestions } from '@/constants/CoffeeSuggestions';
 
 const { Option } = Select;
 const { Title, Paragraph } = Typography;
@@ -15,10 +12,6 @@ const CoffeeMixer = () => {
     const [description, setDescription] = useState('');
     const [total, setTotal] = useState(0)
     const sectionRef = useRef(null);
-    const dispatch = useDispatch();
-
-    const grindingCost = 5000;
-    let totalBeanPrice = 0;
 
     const handleCoffeeChange = (value) => {
         setSelectedCoffees(value);
@@ -34,61 +27,14 @@ const CoffeeMixer = () => {
         setRatios({ ...ratios, [coffee]: value })
     };
 
-    const handleConfirm = async () => {
+    const handleConfirm = () => {
         if (total !== 100) {
             message.error('Tổng tỉ lệ phải bằng 100%!');
         } else {
-            const mixDetails = [];
-            for (let coffee of selectedCoffees) {
-                const selectedCoffeeOption = coffeeOptions.find(option => option.value === coffee);
-                if (selectedCoffeeOption) {
-                    mixDetails.push({
-                        productId: selectedCoffeeOption.id,
-                        percentage: ratios[coffee],
-                    });
-                }
-            }
-            try {
-                const { totalBeanPrice, grindingCost, total } = await calculatePrice(mixDetails);
-                console.log('price', total);
-
-                const newItem = {
-                    isMix: true,
-                    mixDetails,
-                    price: total,
-                    quantity: 1,
-                };
-
-                dispatch(addToCart(newItem));
-                message.success('Công thức của bạn đã được thêm vào giỏ hàng!');
-                resetRatios();
-            } catch (error) {
-                console.error("Error calculating price: ", error);
-                message.error("Có lỗi khi tính giá sản phẩm.");
-            }
+            generateDescription();
+            message.success('Công thức của bạn đã được xác nhận!');
         }
     };
-
-
-    const calculatePrice = async (mixDetails) => {
-        let total = 0;
-
-
-        for (let detail of mixDetails) {
-            try {
-                const response = await fetch(`${BASE_URL}/api/product/get-product-by-id/${detail.productId}`);
-                const product = await response.json();
-                const productPrice = product.product.price;
-                totalBeanPrice += (productPrice * detail.percentage) / 100;
-            } catch (error) {
-                console.error('Failed to fetch product price', error);
-            }
-        }
-
-        total = totalBeanPrice + grindingCost;
-        return { totalBeanPrice, grindingCost, total };
-    };
-
 
     useEffect(() => {
         setTotal(ratios.arabica + ratios.robusta + ratios.culi)
@@ -123,7 +69,6 @@ const CoffeeMixer = () => {
         setRatios(suggestion.ratio)
         scrollToSection();
     }
-    console.log('selectedCoffees', selectedCoffees);
 
     const sortCoffeeRatios = (coffeeRatios) => {
         const capitalize = (str) => str.charAt(0).toUpperCase() + str.slice(1);
@@ -268,15 +213,15 @@ const CoffeeMixer = () => {
                                     dataSource={[
                                         {
                                             title: "Tiền Hạt",
-                                            amount: `${totalBeanPrice.toLocaleString()} VND`,
+                                            amount: "50,000 VND", // Số tiền hạt
                                         },
                                         {
                                             title: "Tiền Xay",
-                                            amount: `${grindingCost.toLocaleString()} VND`,
+                                            amount: "10,000 VND", // Số tiền xay
                                         },
                                         {
                                             title: "Tổng Cộng",
-                                            amount: `${total.toLocaleString()} VND`,
+                                            amount: "60,000 VND", // Tổng cộng tiền
                                         },
                                     ]}
                                     renderItem={(item) => (
@@ -288,7 +233,6 @@ const CoffeeMixer = () => {
                                         </List.Item>
                                     )}
                                 />
-
                                 {total !== 100 && "Còn thiếu: " + (100 - total) + "%"}
                             </Paragraph>
                         </Card>
@@ -299,7 +243,7 @@ const CoffeeMixer = () => {
                 <Row justify="center" gutter={[16, 16]} style={{ marginTop: '20px' }}>
                     <Col>
                         <Button type="primary" onClick={handleConfirm}>
-                            Thêm vào giỏ
+                            Thanh Toán
                         </Button>
                     </Col>
                     <Col>

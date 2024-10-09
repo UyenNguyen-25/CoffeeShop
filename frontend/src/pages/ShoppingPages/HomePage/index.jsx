@@ -48,7 +48,7 @@ export default function HomePage() {
           />
           <div className="absolute inset-0 flex flex-col items-start justify-center pl-4 sm:pl-10 lg:pl-[150px] text-white bg-opacity-50 bg-black">
             <h1 className="text-xl md:text-4xl lg:text-5xl font-bold drop-shadow-lg">
-            Hoa Đất xin chào!
+              Welcome to Coffee Haven!
             </h1>
             <p className="text-xs md:text-lg lg:text-xl mt-2 md:mt-5 lg:mt-10 drop-shadow-md">
               Coffee Shop is the place where you can get flavorful coffee strains <br />

@@ -32,12 +32,6 @@ const Sidebar = () => {
       <ShopOutlined />,
       ["admin", "staff"]
     ),
-    getItem("Quản lý mã khuyến mãi",
-      "/dashboard/promotions-management",
-      <FileTextOutlined />, [
-      "admin",
-      "staff",
-    ]),
     getItem("Quản lý đơn hàng", "/dashboard/orders-management", <FileTextOutlined />, [
       "admin",
       "staff",

@@ -25,7 +25,6 @@ import { BASE_URL } from "@/constants/apiConfig";
 import cart from "../../../assets/cart.png";
 import EditAddress from "./EditAddress";
 import { Trash2 } from "lucide-react";
-import { coffeeOptions } from "@/constant/CoffeeSuggestions";
 
 const CartPage = () => {
   const nav = useNavigate();
@@ -88,6 +87,7 @@ const CartPage = () => {
 
   useEffect(() => {
     const storedAddress = localStorage.getItem('shippingAddress');
+    console.log('storedAddress', storedAddress)
     if (storedAddress) {
       setShippingAddress(JSON.parse(storedAddress));
     }
@@ -142,30 +142,12 @@ const CartPage = () => {
       return;
     }
 
-    const orderItems = cartItems.map((item) => {
-      if (item.isMix) {
-        return {
-          productId: null,
-          quantity: item.quantity,
-          price: item.price,
-          isMix: true,
-          mixDetails: item.mixDetails.map((mixDetail) => ({
-            productId: mixDetail.productId,
-            percentage: mixDetail.percentage
-          })),
-          typeId: null
-        };
-      } else {
-        return {
-          productId: item._id,
-          quantity: item.quantity,
-          price: item.price,
-          isMix: false,
-          mixDetails: null,
-          typeId: item.typeId
-        };
-      }
-    });
+    const orderItems = cartItems.map((item) => ({
+      productId: item._id,
+      quantity: item.quantity,
+      price: item.price,
+      typeId: item.typeId
+    }));
 
     const orderData = {
       email: shippingAddress.email,
@@ -178,8 +160,7 @@ const CartPage = () => {
       shippingAddress: shippingAddress.fullAddress,
       discountAmount: discountAmount
     };
-
-    console.log('order data', orderData);
+    // console.log('order data', orderData)
 
     try {
       const response = await axios.post(
@@ -195,12 +176,12 @@ const CartPage = () => {
         } else if (paymentMethod === "momo") {
           const payosData = {
             orderId: response.data._id,
-            amount: response.data.totalPrice,
-            // amount: 2000,
+            // amount: response.data.totalPrice,
+            amount: 2000,
           };
           // console.log('payosData', payosData);
           const payosResponse = await axios.post(`${BASE_URL}/api/payment/create-payment`, payosData);
-          console.log('payosResponse', payosResponse);
+          console.log('payosResponse', payosResponse)
           if (payosResponse.data && payosResponse.data.payUrl) {
             window.location.href = payosResponse.data.payUrl;
             dispatch(clearCart());
@@ -217,7 +198,6 @@ const CartPage = () => {
       message.error("Đặt hàng thất bại, vui lòng thử lại");
     }
   };
-
   return (
     <div className="py-9 px-6 md:px-24">
       <h1 className="text-2xl font-semibold pb-5">Giỏ Hàng</h1>
@@ -247,48 +227,25 @@ const CartPage = () => {
               </TableHeader>
               <TableBody>
                 {cartItems.map((item) => (
-                  <TableRow key={item.isMix ? item.mixDetails[0].productId : item._id} className="align-middle">
-                    <TableCell className="flex items-center gap-3">
-                      {item.isMix ? (
-                        // Rendering mixed coffee item
-                        <div>
-                          <p className="font-normal text-base text-left">Cà phê trộn:</p>
-                          {item.mixDetails.map((mix, index) => (
-                            <div key={index} className="flex items-center gap-1">
-                              <span>{coffeeOptions.find(option => option.id === mix.productId)?.label || "Không xác định"}: {mix.percentage}%</span>
-                            </div>
-                          ))}
+                  <TableRow key={item.id} className="align-middle">
+                    <TableCell className="flex flex-col md:flex-row items-center gap-3">
+                      <img className="w-24 h-24 object-cover" src={item.img[0]} alt={item.name} />
+                      <div className="flex flex-col gap-1">
+                        <p className="font-normal text-base text-left">{item.name}</p>
+                        <div className="text-[rgba(0,0,0,.54)]">
+                          <p>Phân Loại Hàng: </p>
+                          <p>{types.find((type) => type._id === item?.typeId)?.name || "Không xác định"}</p>
                         </div>
-                      ) : (
-                        // Rendering regular product item
-                        <div className="flex items-center">
-                          <img className="w-24 h-24 object-cover" src={item.img[0]} alt={item.name} />
-                          <div className="flex flex-col gap-3">
-                            <p className="w-full flex items-center font-normal text-base text-left">{item.name}</p>
-                            <div className="text-[rgba(0,0,0,.54)]">
-                              <p>Phân Loại Hàng:</p>
-                              <p>{types.find(type => type._id === item?.typeId)?.name || "Không xác định"}</p>
-                            </div>
-                          </div>
-                        </div>
-                      )}
+                      </div>
                     </TableCell>
                     <TableCell className="text-base font-semibold text-center">{formatter.format(item.price)}</TableCell>
                     <TableCell className="text-center">
-                      <div className="flex gap-x-0">
-                        <button
-                          className="bg-[#E5E9EB] w-7 py-1 rounded-l-full font-bold"
-                          onClick={() => handleDecrease(item.isMix ? item.mixDetails[0].productId : item._id)}
-                        >
+                      <div className="flex gap-x-1">
+                        <button className="bg-[#E5E9EB] w-7 py-1 rounded-l-full font-bold" onClick={() => handleDecrease(item._id)}>
                           <MinusOutlined />
                         </button>
-                        <p className="bg-[#E5E9EB] text-center py-1 w-7 text-base">
-                          {item.quantity}
-                        </p>
-                        <button
-                          className="bg-[#E5E9EB] w-7 py-1 rounded-r-full font-bold"
-                          onClick={() => handleIncrease(item.isMix ? item.mixDetails[0].productId : item._id)}
-                        >
+                        <p className="bg-[#E5E9EB] text-center py-1 w-7 text-base">{item.quantity}</p>
+                        <button className="bg-[#E5E9EB] w-7 py-1 rounded-r-full font-bold" onClick={() => handleIncrease(item._id)}>
                           <PlusOutlined />
                         </button>
                       </div>
@@ -298,7 +255,7 @@ const CartPage = () => {
                         <span>{formatter.format(item.price * item.quantity)}</span>
                         <Popconfirm
                           title="Xóa sản phẩm khỏi giỏ hàng?"
-                          onConfirm={() => confirm(item.isMix ? item.mixDetails[0].productId : item._id)}
+                          onConfirm={() => confirm(item._id)}
                           onCancel={cancel}
                           okText="Ok"
                           cancelText="Hủy"
@@ -312,7 +269,6 @@ const CartPage = () => {
                   </TableRow>
                 ))}
               </TableBody>
-
             </Table>
           </div>
 
@@ -381,7 +337,7 @@ const CartPage = () => {
                   checked={paymentMethod === "momo"}
                   onChange={() => setPaymentMethod("momo")}
                 />
-                <label htmlFor="momo" className="ml-2 cursor-pointer">Thanh toán qua Ngân hàng</label>
+                <label htmlFor="momo" className="ml-2 cursor-pointer">Thanh toán qua Momo</label>
               </div>
             </div>
 

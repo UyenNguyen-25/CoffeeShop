@@ -24,7 +24,6 @@ export default function BlogPage() {
             setTimeout(() => {
                 setIsLoading(false)
             }, 2000)
-            window.scrollTo(0, 0)
         }
     }, [isLoading, selectedBlog])
 
