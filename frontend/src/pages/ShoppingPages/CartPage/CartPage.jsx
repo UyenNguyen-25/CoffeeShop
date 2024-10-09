@@ -201,8 +201,8 @@ const CartPage = () => {
         } else if (paymentMethod === "momo") {
           const payosData = {
             orderId: response.data._id,
-            // amount: response.data.totalPrice,
-            amount: 2000,
+            amount: response.data.totalPrice,
+            // amount: 2000,
           };
           console.log('payosData', payosData);
           const payosResponse = await axios.post(`${BASE_URL}/api/payment/create-payment`, payosData);
