@@ -38,7 +38,7 @@ export const coffeeSuggestions = [
 ];
 
 export const coffeeOptions = [
-  { label: "Arabica", value: "arabica" },
-  { label: "Robusta", value: "robusta" },
-  { label: "Culi", value: "culi" },
+  { label: "Arabica", value: "arabica", id: "66ed43b7ec55623cbec9d650" },
+  { label: "Robusta", value: "robusta", id: "66ed4187ec55623cbec9d64e" },
+  { label: "Culi", value: "culi", id: "66ed43dbec55623cbec9d651" },
 ];
