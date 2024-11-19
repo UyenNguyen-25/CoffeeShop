@@ -48,7 +48,7 @@ export default function HomePage() {
           />
           <div className="absolute inset-0 flex flex-col items-start justify-center pl-4 sm:pl-10 lg:pl-[150px] text-white bg-opacity-50 bg-black">
             <h1 className="text-xl md:text-4xl lg:text-5xl font-bold drop-shadow-lg">
-            Hoa Đất xin chào!
+              Hoa Đất xin chào!
             </h1>
             <p className="text-xs md:text-lg lg:text-xl mt-2 md:mt-5 lg:mt-10 drop-shadow-md">
               Coffee Shop is the place where you can get flavorful coffee strains <br />
@@ -76,7 +76,7 @@ export default function HomePage() {
             alt="hat_ca_phe"
           />
         </Col>
-        <Col xs={20} md={12} lg={9}>
+        <Col xs={20} md={12} lg={10}>
           <div style={{ color: "#664228", lineHeight: 1.3 }}>
             <p className="font-bold md:text-2xl text-lg max-md:mt-3">HOA ĐẤT</p>
             <p className="font-bold md:text-2xl text-lg">Và câu chuyện truyền cảm hứng</p>
@@ -87,7 +87,7 @@ export default function HomePage() {
         </Col>
       </Row>
 
-      <Row gutter={[10, 10]} justify={"center"} align={"middle"} className="py-16 bg-[#E6D3B3] flex-row-reverse">
+      <Row gutter={[10, 10]} justify={"space-evenly"} align={"middle"} className="py-16 bg-[#E6D3B3] flex-row-reverse">
         <Col xs={20} md={10}>
           <Image
             preview={false}
@@ -97,8 +97,8 @@ export default function HomePage() {
             alt="nong_dan"
           />
         </Col>
-        <Col xs={20} md={12} lg={11}>
-          <div className="pr-16">
+        <Col xs={20} md={12} lg={10}>
+          <div>
             <div style={{ color: "#664228", lineHeight: 1.3 }}>
               <p className="font-bold md:text-2xl text-lg max-md:mt-3">Sứ mệnh</p>
               <p className="md:text-base text-[14px] my-3">
@@ -118,8 +118,8 @@ export default function HomePage() {
           </div>
         </Col>
       </Row>
-      <Row gutter={[0, 30]} justify="center" style={{ display: 'flex', flexWrap: 'wrap', padding: "50px", width: "100%" }}>
-        <Row gutter={[0, 0]}>
+      <Row gutter={[0, 30]} justify="center" style={{ display: 'flex', flexWrap: 'wrap', width: "100%", paddingTop: "50px", paddingBottom: "50px" }}>
+        <Row gutter={[0, 0]} style={{ paddingRight: "50px", paddingLeft: "50px" }}>
           <Col xs={24}>
             <Typography.Title style={{ color: "#664228", textAlign: "center", fontWeight: 700 }}>
               “MIX” CÀ PHÊ THEO SỞ THÍCH
@@ -131,7 +131,7 @@ export default function HomePage() {
             </Typography.Paragraph>
           </Col>
         </Row>
-        <Col xs={24}>
+        <Col xs={24} style={{ paddingRight: "50px", paddingLeft: "50px" }}>
           <Typography.Title style={{ color: "#664228", fontStyle: "italic", textAlign: "center" }}>
             Bảng gợi ý kết hợp cà phê
           </Typography.Title>
@@ -143,7 +143,7 @@ export default function HomePage() {
               <Card title={suggestion.name}
                 style={{
                   flex: 1,
-                  maxWidth: '70%',
+                  maxWidth: '80%',
                   minWidth: "65%",
                   display: 'flex',
                   flexDirection: 'column',
@@ -157,12 +157,15 @@ export default function HomePage() {
                 styles={{
                   header: {
                     color: 'white',
-                    textAlign: 'center',
+                    textAlign: 'center'
+                  },
+                  title: {
                     textWrap: "nowrap",
                     whiteSpace: 'normal',
                     wordWrap: 'break-word'
                   }
                 }}
+
               >
                 <p>{suggestion.description}</p>
                 <p className='font-semibold mt-3'>Tỷ lệ: </p>
