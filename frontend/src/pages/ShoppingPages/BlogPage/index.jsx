@@ -29,7 +29,7 @@ export default function BlogPage() {
     }, [isLoading, selectedBlog])
 
     return (
-        <Content style={{ padding: '50px', paddingTop: 10 }}>
+        <Content className='md:px-16 py-7 px-6'>
             <Row gutter={16}>
                 {/* Sidebar */}
                 <Col xs={24} md={10} lg={8}>

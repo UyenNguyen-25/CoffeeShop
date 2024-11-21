@@ -13,7 +13,7 @@ const ProductList = (props) => {
         <Link key={index} to={`/product/${item?._id}`}>
           <div className="bg-white shadow-2xl rounded-xl pb-4 transition-transform duration-300 hover:scale-105">
             <img
-              className="rounded-t-xl object-cover w-full h-48"
+              className="rounded-t-xl object-cover w-full h-60"
               src={item.img[0]}
               alt={item.name}
               onMouseOver={e => {
@@ -48,12 +48,12 @@ const ProductList = (props) => {
                 )}
               </div>
               <div className="flex justify-between">
-              <p className="mt-2 text-sm text-gray-600">
-                Loại: {item.code}
-              </p>
-              <p className="mt-2 text-sm bg-[#F1DEBC] text-[#4C2113] w-fit py-1 px-3 rounded-lg font-semibold">
-                {item.category == "phamay" ? "Pha Máy" : "Pha Phin"}
-              </p>
+                <p className="mt-2 text-sm text-gray-600">
+                  Loại: {item.code}
+                </p>
+                <p className="mt-2 text-sm bg-[#F1DEBC] text-[#4C2113] w-fit py-1 px-3 rounded-lg font-semibold">
+                  {item.category == "phamay" ? "Pha Máy" : "Pha Phin"}
+                </p>
               </div>
               <button className="mt-2 bg-[#4C2113] text-white py-1 px-4 rounded">
                 Xem thêm

@@ -41,7 +41,7 @@ export default function ProductsPage() {
       <img src="https://file.hstatic.net/200000379831/collection/product_group_-_coffee_bean_54d6a0132f19462b86f1387318c35449.png" />
       <div className="w-full flex flex-col gap-y-3 lg:px-20 py-1">
         <div className="bg-white h-fit rounded-lg py-4 mt-5 max-md:w-screen overflow-x-auto">
-          <div className="flex gap-5 ml-4 max-md:overflow-x-auto max-md:flex-nowrap overflow-none">
+          {!isLoading && productsData && <div className="flex gap-5 ml-4 max-md:overflow-x-auto max-md:flex-nowrap overflow-none">
             <button
               className={`border border-[#D1D4D5] rounded-lg px-3 py-1 text-base max-sm:text-sm max-md:text-xs min-w-fit ${!sort ? "bg-[#4C2113] text-white" : ""
                 }`}
@@ -63,7 +63,7 @@ export default function ProductsPage() {
             >
               Giá Cao - Thấp
             </button>
-          </div>
+          </div>}
         </div>
         <div className="mt-4 mb-7 px-2 sm:px-4 lg:px-0">
           {!isLoading ? (

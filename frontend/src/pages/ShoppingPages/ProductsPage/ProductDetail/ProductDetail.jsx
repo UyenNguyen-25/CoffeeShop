@@ -5,7 +5,7 @@ import { useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
 import { useNavigate, useParams } from "react-router-dom";
 import { toast } from "sonner";
-import ProductReviews from "../components/ProductReviews";
+// import ProductReviews from "../components/ProductReviews";
 import { soldout } from "@/assets/logo";
 import { useGetProductDetailQuery } from "@/redux/features/products/productsApiSlice";
 import { useGetTypesQuery } from "@/redux/features/types/typesApiSlice";
@@ -85,7 +85,7 @@ const ProductDetail = () => {
       }}
     >
       <div className="px-40 py-10 max-lg:px-10">
-        {loading && Object.is(detail) && Array.isArray(types) ? (
+        {(detailLoading || typeLoading) && (!detailProduct || !typeData) ? (
           <>
             <div className="flex">
               <Skeleton className="w-fit h-[641px] bg-[#F5F5F6]" />
@@ -202,17 +202,20 @@ const ProductDetail = () => {
                 </div>
               </div>
             </Row>
-            <div className="flex flex-col gap-y-5">
+            <div className="flex flex-col gap-y-5 mb-6">
               <div className="bg-[#F1DEBC] py-4 pl-7 text-2xl font-bold mt-5">
                 MÔ TẢ SẢN PHẨM
               </div>
-              <div className="text-xl">{detail?.description}</div>
+              <div
+                className="text-xl space-y-5 mb-4"
+                dangerouslySetInnerHTML={{ __html: detail?.description }}
+              ></div>
               <img
-                className="w-2/5 border border-gray-300 rounded-lg mx-auto"
+                className="w-2/5 max-h-full border border-gray-300 rounded-lg mx-auto"
                 src={detail?.img[0]}
               />
             </div>
-            <ProductReviews product={detail} />
+            {/* <ProductReviews product={detail} /> */}
           </div>
         )}
       </div>
